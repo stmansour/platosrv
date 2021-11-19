@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"mojo/util"
 	"os"
 	db "platosrv/db/lib"
+	util "platosrv/util/lib"
 	"time"
 )
 
