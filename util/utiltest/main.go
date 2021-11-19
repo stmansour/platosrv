@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	util "plato/util/lib"
+	util "platosrv/util/lib"
 )
 
 type udate struct {

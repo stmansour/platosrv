@@ -7,8 +7,8 @@ import (
 	"extres"
 	"fmt"
 	"runtime/debug"
-	"plato/session"
-	util "plato/util/lib"
+	"platosrv/session"
+	util "platosrv/util/lib"
 )
 
 // ErrSessionRequired session required error

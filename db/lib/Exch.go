@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
-	"plato/session"
+	"platosrv/session"
 	"time"
 )
 

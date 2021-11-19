@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	util "plato/util/lib"
+	util "platosrv/util/lib"
 	"time"
 
 	"github.com/kardianos/osext"

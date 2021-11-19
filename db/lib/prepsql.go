@@ -1,7 +1,6 @@
 package db
 
 import (
-	"mojo/util"
 	"strings"
 )
 
@@ -97,8 +96,6 @@ func BuildPreparedStatements() {
 	Pdb.Prepstmt.GetExch, err = Pdb.DB.Prepare("SELECT " + flds + " FROM Exch WHERE XID=?")
 	Errcheck(err)
 	s1, s2, s3, _, _ = GenSQLInsertAndUpdateStrings(flds)
-	var sdebug = "INSERT INTO Exch (" + s1 + ") VALUES(" + s2 + ")"
-	util.Console("InsertExch:   %s\n", sdebug)
 	Pdb.Prepstmt.InsertExch, err = Pdb.DB.Prepare("INSERT INTO Exch (" + s1 + ") VALUES(" + s2 + ")")
 	Errcheck(err)
 	Pdb.Prepstmt.UpdateExch, err = Pdb.DB.Prepare("UPDATE Exch SET " + s3 + " WHERE XID=?")

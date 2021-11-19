@@ -1,7 +1,7 @@
 package session
 
 import (
-	util "plato/util/lib"
+	util "platosrv/util/lib"
 )
 
 // AIRAuthenticateResponse is the reply structure from Accord Directory

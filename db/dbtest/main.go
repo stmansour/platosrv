@@ -7,8 +7,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	db "plato/db/lib"
-	"plato/session"
+	db "platosrv/db/lib"
+	"platosrv/session"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"

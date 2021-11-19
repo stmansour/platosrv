@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"mojo/util"
 	"os"
-	db "plato/db/lib"
+	db "platosrv/db/lib"
 	"time"
 )
 
