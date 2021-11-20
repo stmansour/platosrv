@@ -1,4 +1,4 @@
-DIRS=util session db
+DIRS=util session db ws server test
 DIST=dist
 .PHONY: test
 
@@ -16,7 +16,7 @@ package:
 	for dir in $(DIRS); do make -C $$dir package;done
 
 all: clean plato package test stats
-	echo "Completed"
+	@echo "Completed"
 
 build: clean plato package
 

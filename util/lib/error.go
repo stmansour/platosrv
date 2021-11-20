@@ -15,3 +15,11 @@ func ErrCheck(err error) {
 		log.Fatal(err)
 	}
 }
+
+// LogAndPrintError encapsulates logging and printing an error.
+// Note that the error is printed only if the environment is NOT production.
+func LogAndPrintError(funcname string, err error) {
+	errmsg := fmt.Sprintf("%s: err = %v\n", funcname, err)
+	Ulog(errmsg)
+	fmt.Println(errmsg)
+}
