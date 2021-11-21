@@ -2,7 +2,17 @@
     "message": "",
     "record": {
         "ExchCount": 4321,
-        "ItemCount": 1076
+        "ItemCount": 1076,
+        "Tables": [
+            {
+                "Name": "Item",
+                "Size": 32768
+            },
+            {
+                "Name": "Exch",
+                "Size": 32768
+            }
+        ]
     },
     "status": "success"
 }

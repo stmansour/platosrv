@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/static/html/dashboard.css">
+    <script>
+        /*global
+        w2ui, console, plural, monthBack, monthFwd, dayBack, dayFwd, setToRAForm, setToForm,
+        w2uiDateControlString, w2popup, getCurrentBusiness, dateControlString, dateMonthFwd,
+        tcidPickerDropRender, tcidRAPayorPickerRender, tcidPickerCompare, dateMonthBack,
+        ridRentablePickerRender, ridRentableDropRender,ridRentableCompare, calcRarGridContractRent,
+        handleDateToolbarAction, setDateControlsInToolbar, genDateRangeNavigator, getPaymentTypeName,
+        getBUDfromBID, buildPaymentTypeOptions, getPaymentTypeID, buildPaymentTypeSelectList,
+        tcidReceiptPayorPickerRender
+        */
+
+        /*globals $:false */
+        "use strict";
+
+        $(function() {
+            getDashboard();
+        });
+    </script>
+</head>
+
+<body>
+    <table cellspacing="4" cellpadding="4" align="center">
+        <tr>
+            <td colspan="3" align="center">
+                <p class="title1">Plato Database Statistics</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" class="platoStatLabel">TABLE</td>
+            <td align="right" class="platoStatLabel">RECORDS</td>
+            <td align="right" class="platoStatLabel">DATE RANGE</td>
+            <td align="right" class="platoStatLabel">DISK SPACE</td>
+        </tr>
+        <tr class="platorow">
+            <td align="right"><span class="platoSmallStatName" id="pTableName0"></span></td>
+            <td align="right"><span class="platoStatValue" id="pTableCount0"></span></td>
+            <td align="right"><span class="platoStatValue" id="pTableDtRange0"></span></td>
+            <td align="right"><span class="platoStatValue" id="pTableSize0"></span></td>
+        </tr>
+        <tr class="platorow">
+            <td align="right"><span class="platoSmallStatName" id="pTableName1"></span></td>
+            <td align="right"><span class="platoStatValue" id="pTableCount1"></span></td>
+            <td align="right"><span class="platoStatValue" id="pTableDtRange1"></span></td>
+            <td align="right"><span class="platoStatValue" id="pTableSize1"></span></td>
+        </tr>
+    </table>
+</body>
+
+</html>

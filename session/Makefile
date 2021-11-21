@@ -1,5 +1,5 @@
 TOP=..
-BINDIR=${TOP}/dist/wreis
+BINDIR=${TOP}/dist/plato
 THISDIR="lib"
 COUNTOL=${TOP}/tools/bashtools/countol.sh
 

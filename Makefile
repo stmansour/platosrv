@@ -1,4 +1,4 @@
-DIRS=util session db ws server test
+DIRS=util session db ws server webui test
 DIST=dist
 .PHONY: test
 

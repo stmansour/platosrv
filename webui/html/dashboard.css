@@ -1,0 +1,48 @@
+@import url('http://fonts.googleapis.com/css?family=Roboto');
+@import url('http://fonts.googleapis.com/css?family=Source+Code+Pro%7CSource+Sans+Pro:700');
+.title1 {
+	margin: 60px 60 20px 60;
+	color: #666;
+	font-size: 36px;
+	font-weight: bold;
+	line-height: 1em;
+	font-family: "Source Sans Pro", sans-serif;
+}
+.platoStatLabel {
+	color: #666;
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 1em;
+	font-family: "Source Sans Pro", sans-serif;
+}
+.platoStatValue {
+	color: #5A5;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 1em;
+	font-family: "Source Sans Pro", sans-serif;
+}
+.platoSmallStatLabel {
+	color: #555;
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 1em;
+	font-family: "Source Sans Pro", sans-serif;
+}
+.platoSmallStatName {
+	color: #000;
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 1em;
+	font-family: "Source Sans Pro", sans-serif;
+}
+.platoSmallStatValue {
+	color: #373;
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 1em;
+	font-family: "Source Sans Pro", sans-serif;
+}
+.platorow {
+	vertical-align: baseline;
+}
