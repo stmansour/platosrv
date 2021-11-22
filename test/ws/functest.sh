@@ -114,53 +114,42 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     dojsonPOST "http://localhost:${SVCPORT}/v1/dashboard/" "request" "${TFILES}${STEP}"  "Dashboard"
 fi
 
-# #------------------------------------------------------------------------------
-# #  TEST c
-# #
-# #  Login and Get a specific property then logoff.
-# #
-# #  Scenario:
-# #  login
-# #  get property 1
-# #
-# #  Expected Results:
-# #   1. All fields of property 1 are returned
-# #   2.
-# #------------------------------------------------------------------------------
-# TFILES="c"
-# STEP=0
-# if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
-#     mysql --no-defaults plato < xb.sql
+#------------------------------------------------------------------------------
+#  TEST c
 #
-#     # encodeRequest "{\"user\":\"${USER}\",\"pass\":\"${PASS}\"}"
-#     # OUTFILE="${TFILES}${STEP}"
-#     # dojsonPOST "http://localhost:${SVCPORT}/v1/authn/" "request" "${OUTFILE}"  "Property-Search"
-#     #
-#     # #-----------------------------------------------------------------------------
-#     # # Now we need to add the token to the curl command for future calls to
-#     # # the server.  curl -b "air=${TOKEN}"  ...
-#     # # Set the command line for cookies in ${COOKIES} and dojsonPOST will use them.
-#     # #-----------------------------------------------------------------------------
-#     # TOKEN=$(grep Token "${OUTFILE}" | awk '{print $2;}' | sed 's/[",]//g')
-#     # COOKIES="-b air=${TOKEN}"
-#     login
+#  Login and do a search on Exch
 #
-#     encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0}'
-#     dojsonPOST "http://localhost:${SVCPORT}/v1/property/" "request" "${TFILES}${STEP}"  "Property-Search"
+#  Scenario:
+#  login
+#  search for AUDUSD for Nov 18, 2021 8:00am to 12:00pm
 #
-#     encodeRequest '{"cmd":"get"}'
-#     dojsonPOST "http://localhost:${SVCPORT}/v1/logoff/" "request" "${TFILES}${STEP}"  "logoff"
-#     COOKIES=
-#
-#     #-----------------------------------------------------------------------------
-#     # At this point, the cookie is no longer valid.  But try to use it again to
-#     # verify that the server won't let it be used, and it properly handles a
-#     # terminated cookie value
-#     #-----------------------------------------------------------------------------
-#     encodeRequest '{"cmd":"get"}'
-#     dojsonPOST "http://localhost:${SVCPORT}/v1/logoff/" "request" "${TFILES}${STEP}"  "logoff using invalid cookie token"
-# fi
-#
+#  Expected Results:
+#   1. All fields of property 1 are returned
+#   2. Logoff should be successful
+#   3. Second logoff should fail as there is no session
+#------------------------------------------------------------------------------
+TFILES="c"
+STEP=0
+if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
+    mysql --no-defaults plato < xb.sql
+
+    login
+    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0, "Tickers": ["AUDUSD"], "DtStart": "11/18/2021", "DtStop": "11/19/2021"}'
+    dojsonPOST "http://localhost:${SVCPORT}/v1/exch/" "request" "${TFILES}${STEP}"  "Exch-Search"
+
+    encodeRequest '{"cmd":"get"}'
+    dojsonPOST "http://localhost:${SVCPORT}/v1/logoff/" "request" "${TFILES}${STEP}"  "logoff"
+    COOKIES=
+
+    #-----------------------------------------------------------------------------
+    # At this point, the cookie is no longer valid.  But try to use it again to
+    # verify that the server won't let it be used, and it properly handles a
+    # terminated cookie value
+    #-----------------------------------------------------------------------------
+    encodeRequest '{"cmd":"get"}'
+    dojsonPOST "http://localhost:${SVCPORT}/v1/logoff/" "request" "${TFILES}${STEP}"  "logoff using invalid cookie token"
+fi
+
 # #------------------------------------------------------------------------------
 # #  TEST d
 # #

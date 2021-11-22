@@ -31,7 +31,7 @@ type ValidateCookie struct {
 //-----------------------------------------------------------------------------
 func SvcLogoff(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	var funcname = "SvcLogoff"
-	util.Console("Entered %s\n", funcname)
+	util.Console("Entered %s, session = %s\n", funcname, d.sess.Token)
 	if d.sess == nil {
 		util.Console("%s:  d.sess is nil\n", funcname)
 		err := fmt.Errorf("%s: cannot delete nil session", funcname)

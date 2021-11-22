@@ -131,10 +131,11 @@ var Svcs = []ServiceHandler{
 	{Cmd: "authn", AuthNRequired: false, Handler: SvcAuthenticate},
 	{Cmd: "dashboard", AuthNRequired: true, Handler: SvcHandlerDashboard},
 	{Cmd: "discon", AuthNRequired: true, Handler: SvcDisableConsole},
-	{Cmd: "sessions", AuthNRequired: true, Handler: SvcDumpSessions},
 	{Cmd: "encon", AuthNRequired: true, Handler: SvcEnableConsole},
+	{Cmd: "exch", AuthNRequired: true, Handler: SvcHandlerExch},
 	{Cmd: "logoff", AuthNRequired: true, Handler: SvcLogoff}, // it handles properly if session has already timed out
 	{Cmd: "ping", AuthNRequired: false, Handler: SvcHandlerPing},
+	{Cmd: "sessions", AuthNRequired: true, Handler: SvcDumpSessions},
 	{Cmd: "userprofile", AuthNRequired: true, Handler: SvcUserProfile},
 	{Cmd: "usertd", AuthNRequired: true, Handler: SvcUserTypeDown},
 }
