@@ -12,6 +12,10 @@ import (
 	"github.com/kardianos/osext"
 )
 
+// MINYEAR is a constant value used for comparisons. If year is less than this,
+// assume the date was unspecified
+var MINYEAR = 2011
+
 // Pdb is a struct with all variables needed by the db infrastructure
 var Pdb struct {
 	Prepstmt PrepSQL

@@ -239,17 +239,18 @@ function buildPageElements() {
                     w2ui.toplayout.load('main','/static/html/dashboard.html');
                     w2ui.toplayout.hide('right',true);
                     break;
-                // case 'property':
-                //     grid = event.target + 'Grid';
-                //     w2ui[grid].url = '/v' + app.protocolVersion + '/' + event.target + '/';
-                //     w2ui.toplayout.content('main', w2ui[grid]);
-                //     w2ui.toplayout.hide('right',true);
-                //     break;
+                case 'exch':
+                    grid = event.target + 'Grid';
+                    w2ui[grid].url = '/v' + app.protocolVersion + '/' + event.target + '/';
+                    w2ui.toplayout.content('main', w2ui[grid]);
+                    w2ui.toplayout.hide('right',true);
+                    break;
             }
         },
     }));
 
-    // buildPropertyUIElements();
+    buildExchMethodElements();
+    exchInit();
     // buildRentStepsUIElements();
     // buildRenewOptionsUIElements();
     // buildTrafficUIElements();

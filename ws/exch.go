@@ -32,8 +32,7 @@ type ExchSearchRequestJSON struct {
 	Search      []GenSearch       `json:"search"`      // what fields and what values
 	Sort        []ColSort         `json:"sort"`        // sort criteria
 	Tickers     []string          `json:"Tickers"`     // which tickers are requested
-	DtStart     util.JSONDateTime `json:"DtStart"`
-	DtStop      util.JSONDateTime `json:"DtStop"`
+	Dt          util.JSONDateTime `json:"Dt"`
 }
 
 // ExchSearchRequest a version of ExchSearchRequestJSON where JSONDateTime values
@@ -48,8 +47,7 @@ type ExchSearchRequest struct {
 	Search      []GenSearch
 	Sort        []ColSort
 	Tickers     []string
-	DtStart     time.Time
-	DtStop      time.Time
+	Dt          time.Time
 }
 
 // ExchGrid is the structure of data for a Exch we send to the UI
@@ -186,40 +184,27 @@ func SvcHandlerExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 //    updated whr clause string
 //    any error encountered.
 //------------------------------------------------------------------------------
-func whereBuilder(exchSRD *ExchSearchRequestJSON, whr string) (string, error) {
-	var srd ExchSearchRequest
+func whereBuilder(esr *ExchSearchRequest, whr string) string {
 	var qtickers []string
-	err := util.MigrateStructVals(exchSRD, &srd)
-	if err != nil {
-		return "", err
-	}
 	var wAnd = " AND "
 	var dtAnd = " AND "
-	util.Console("A\n")
-	if len(exchSRD.Tickers) > 0 {
-		util.Console("B\n")
+	if len(esr.Tickers) > 0 {
 		if len(whr) == 0 {
 			whr = "WHERE "
 			wAnd = ""
 		}
-		util.Console("C\n")
-		for i := 0; i < len(exchSRD.Tickers); i++ {
-			qtickers = append(qtickers, fmt.Sprintf("%q", exchSRD.Tickers[i]))
-			util.Console("qtickers[%d] = %s\n", i, qtickers[i])
+		for i := 0; i < len(esr.Tickers); i++ {
+			qtickers = append(qtickers, fmt.Sprintf("%q", esr.Tickers[i]))
 		}
-		util.Console("D\n")
 		whr += wAnd + "Ticker IN (" + strings.Join(qtickers, ",") + ")"
 	}
 	if len(whr) == 0 {
 		whr = "WHERE "
 		dtAnd = ""
 	}
-
-	whr += dtAnd + fmt.Sprintf("Dt >= %q AND Dt < %q",
-		srd.DtStart.Format(util.RRDATEFMTSQL),
-		srd.DtStop.Format(util.RRDATEFMTSQL))
-
-	return whr, err
+	whr += dtAnd + fmt.Sprintf("YEAR(Dt)=%d AND MONTH(Dt)=%d AND DAYOFMONTH(Dt)=%d",
+		esr.Dt.Year(), int(esr.Dt.Month()), esr.Dt.Day())
+	return whr
 }
 
 // SvcSearchExch generates a report of all Exch records matching the
@@ -245,14 +230,30 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		return
 	}
 
+	util.Console("%s: A\n", funcname)
 	var exchSRD ExchSearchRequestJSON
-
 	err = json.Unmarshal([]byte(d.data), &exchSRD)
 	if err != nil {
 		e := fmt.Errorf("%s: Error with json.Unmarshal:  %s", funcname, err.Error())
 		SvcErrorReturn(w, e)
 		return
 	}
+
+	util.Console("%s: B\n", funcname)
+
+	var srd ExchSearchRequest
+	if err = util.MigrateStructVals(&exchSRD, &srd); err != nil {
+		e := fmt.Errorf("%s: Error with MigrateStructVals:  %s", funcname, err.Error())
+		SvcErrorReturn(w, e)
+		return
+	}
+
+	util.Console("%s: C\n", funcname)
+	// Defaults if date was not specified is to set date range to yesterday
+	if srd.Dt.Year() < db.MINYEAR {
+		srd.Dt = time.Now().Add(-24 * time.Hour)
+	}
+	util.Console("%s: D\n", funcname)
 
 	whr := ""
 	order := `Exch.Dt ASC` // default ORDER
@@ -269,11 +270,7 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	if len(whereClause) > 0 {
 		whr += "WHERE " + whereClause
 	}
-	if whr, err = whereBuilder(&exchSRD, whr); err != nil {
-		e := fmt.Errorf("%s: Error with whereBuilder:  %s", funcname, err.Error())
-		SvcErrorReturn(w, e)
-		return
-	}
+	whr = whereBuilder(&srd, whr)
 
 	if len(orderClause) > 0 {
 		order = orderClause
@@ -282,7 +279,7 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	util.Console("order = %s\n", order)
 
 	query := `
-	SELECT DISTINCT {{.SelectClause}}
+	SELECT {{.SelectClause}}
 	FROM Exch {{.WhereClause}}
 	ORDER BY {{.OrderClause}}`
 

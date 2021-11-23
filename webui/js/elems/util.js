@@ -93,6 +93,9 @@ function setInnerHTML(id,s) {
     x.innerHTML = s;
 }
 
+function renderMoney(x) {
+    return number_format(x,2);
+}
 
 function number_format(number, decimals, dec_point, thousands_sep) {
     // http://kevin.vanzonneveld.net
@@ -157,4 +160,4 @@ function number_format(number, decimals, dec_point, thousands_sep) {
         s[1] += new Array(prec - s[1].length + 1).join('0');
     }
     return s.join(dec);
-};
+}
