@@ -134,7 +134,7 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     mysql --no-defaults plato < xb.sql
 
     login
-    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0, "Tickers": ["AUDUSD"], "DtStart": "11/18/2021", "DtStop": "11/19/2021"}'
+    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0, "Tickers": ["AUDUSD"], "Dt": "11/18/2021"}'
     dojsonPOST "http://localhost:${SVCPORT}/v1/exch/" "request" "${TFILES}${STEP}"  "Exch-Search"
 
     encodeRequest '{"cmd":"get"}'

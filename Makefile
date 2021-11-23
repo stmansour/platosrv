@@ -15,10 +15,13 @@ test:
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
 
-all: clean plato package test stats
+all: clean plato package test stats dbprod
 	@echo "Completed"
 
 build: clean plato package
+
+dbprod:
+	@cd test;/usr/local/bin/mysql --no-defaults plato < plato.sql
 
 release:
 	/usr/local/accord/bin/release.sh plato
