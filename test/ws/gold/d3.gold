@@ -1,0 +1,90 @@
+{
+    "records": [
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:57:15 UTC",
+            "Description": "Prosecutors said Inigo Philbrick, who admitted he duped investors who joined him in the purchase of blue-chip art, took advantage of the opacity of the art market.",
+            "IID": 1079,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:57:15 UTC",
+            "Link": "https://www.nytimes.com/2021/11/18/arts/inigo-philbrick-pleads-guilty-art-scam.html",
+            "PubDt": "2021-11-19 00:38:12 UTC",
+            "Title": "Art Dealer Pleads Guilty to Wire Fraud Charges in $86 Million Scam",
+            "recid": 0
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:51 UTC",
+            "Description": "A new review of early Covid-19 cases in the journal Science will revive, though certainly not settle, the debate over how the pandemic began.",
+            "IID": 226,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:51 UTC",
+            "Link": "https://www.nytimes.com/2021/11/18/health/covid-wuhan-market-lab-leak.html",
+            "PubDt": "2021-11-19 03:45:26 UTC",
+            "Title": "First Known Covid Case Was Vendor at Wuhan Market, Scientist Says",
+            "recid": 1
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:48 UTC",
+            "Description": "While financial markets expect today\u2019s profit bonanza in the shipping industry to fade, aviation executives are putting their faith in freighters.",
+            "IID": 56,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:48 UTC",
+            "Link": "https://www.wsj.com/articles/for-airbus-and-boeing-inflation-in-airfreight-may-also-prove-temporary-11637331443?mod=rss_markets_main",
+            "PubDt": "2021-11-19 09:17:00 UTC",
+            "Title": "For Airbus and Boeing, Inflation in Airfreight May Also Prove Temporary",
+            "recid": 2
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:48 UTC",
+            "Description": "Intuit lifted its financial forecast; Farfetch shares plunged after it missed sales expectations.",
+            "IID": 55,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:48 UTC",
+            "Link": "https://www.wsj.com/articles/roblox-intuit-farfetch-lucid-what-to-watch-when-the-stock-market-opens-today-11637322683?mod=rss_markets_main",
+            "PubDt": "2021-11-19 09:32:00 UTC",
+            "Title": "Roblox, Intuit, Farfetch, Lucid: What to Watch in the Stock Market Today",
+            "recid": 3
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:59 UTC",
+            "Description": "People who leased their cars before the pandemic can probably buy their vehicles at the end of the lease for much less than the going market price.",
+            "IID": 487,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:59 UTC",
+            "Link": "https://www.nytimes.com/2021/11/19/business/leased-cars-buying-out-used.html",
+            "PubDt": "2021-11-19 10:00:11 UTC",
+            "Title": "Leasing a Car? Here&#39;s Why You Can Get a Good Deal if You Buy.",
+            "recid": 4
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:59 UTC",
+            "Description": "Do what it takes to stay invested in the stock market, our columnist says. Government bonds may help, even if they look unappealing now.",
+            "IID": 490,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:59 UTC",
+            "Link": "https://www.nytimes.com/2021/11/19/business/stock-market-bonds-crash.html",
+            "PubDt": "2021-11-19 10:00:28 UTC",
+            "Title": "Buy Stocks to Prosper. Buy Bonds to Sleep at Night.",
+            "recid": 5
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:48 UTC",
+            "Description": "The videogame publisher has shed a third of its market value as doubts about management\u2019s ability to fix its workplace culture have grown.",
+            "IID": 54,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:48 UTC",
+            "Link": "https://www.wsj.com/articles/activision-really-needs-to-hit-the-reset-button-11637334894?mod=rss_markets_main",
+            "PubDt": "2021-11-19 10:14:00 UTC",
+            "Title": "Activision Needs to Hit the Reset Button",
+            "recid": 6
+        }
+    ],
+    "status": "success",
+    "total": 7
+}

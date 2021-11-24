@@ -31,7 +31,6 @@ type ItemSearchRequestJSON struct {
 	SearchLogic string            `json:"searchLogic"` // OR | AND
 	Search      []GenSearch       `json:"search"`      // what fields and what values
 	Sort        []ColSort         `json:"sort"`        // sort criteria
-	Titles      []string          `json:"Titles"`      // which tickers are requested
 	PubDt       util.JSONDateTime `json:"PubDt"`
 }
 
@@ -46,7 +45,6 @@ type ItemSearchRequest struct {
 	SearchLogic string
 	Search      []GenSearch
 	Sort        []ColSort
-	Titles      []string
 	PubDt       time.Time
 }
 
@@ -205,7 +203,7 @@ func SvcSearchItem(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 
 	whr := ""
 
-	order := `Title,Item.PubDt ASC` // default ORDER
+	order := `Item.PubDt,Item.Title ASC` // default ORDER
 
 	// get where clause and order clause for sql query
 	// util.Console("len(d.wsSearchReq.Search) = %d\n", len(d.wsSearchReq.Search))
@@ -228,7 +226,15 @@ func SvcSearchItem(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	//------------------------------------------------------------------------
 	if len(d.wsSearchReq.Search) > 0 {
 		s := d.wsSearchReq.Search[0].Value
-		whr = "WHERE Title LIKE \"%" + s + "%\" OR Description LIKE \"%" + s + "%\""
+		whr = "WHERE (Title LIKE \"%" + s + "%\" OR Description LIKE \"%" + s + "%\")"
+	}
+	if srd.PubDt.Year() >= db.MINYEAR {
+		sTmp := "WHERE "
+		if len(whr) > 0 {
+			sTmp = " AND "
+		}
+		whr += sTmp + fmt.Sprintf("YEAR(PubDt)=%d AND MONTH(PubDt)=%d AND DAYOFMONTH(PubDt)=%d",
+			srd.PubDt.Year(), int(srd.PubDt.Month()), srd.PubDt.Day())
 	}
 
 	if len(orderClause) > 0 {
