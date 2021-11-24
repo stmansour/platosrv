@@ -6,6 +6,7 @@ DBGEN=../../../tools/dbgen
 CREATENEWDB=0
 DISTBIN="../../dist/plato"
 SVCPORT="8277"
+DBLOADED=""
 
 echo "Create new database..."
 mysql --no-defaults plato < ${DISTBIN}/schema.sql
@@ -65,6 +66,19 @@ login() {
     fi
 }
 
+#
+#  Checks to see if the param 1 db is loaded. If not, it will be loaded.
+#
+#  INPUTS
+#     $1 = database to load
+#-------------------------------------------------------------------------------
+loadDB() {
+    if [ "${DBLOADED}" != "${1}" ]; then
+        mysql --no-defaults plato < "${1}"
+        DBLOADED="${1}"
+    fi
+}
+
 ################################################################################
 #  BEGIN TESTING...
 ################################################################################
@@ -108,7 +122,7 @@ fi
 TFILES="b"
 STEP=0
 if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
-    mysql --no-defaults plato < x${TFILES}.sql
+    loadDB x${TFILES}.sql
     login
     encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0}'
     dojsonPOST "http://localhost:${SVCPORT}/v1/dashboard/" "request" "${TFILES}${STEP}"  "Dashboard"
@@ -131,7 +145,7 @@ fi
 TFILES="c"
 STEP=0
 if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
-    mysql --no-defaults plato < xb.sql
+    loadDB xb.sql
 
     login
     encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0, "Tickers": ["AUDUSD"], "Dt": "11/18/2021"}'
@@ -150,37 +164,38 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     dojsonPOST "http://localhost:${SVCPORT}/v1/logoff/" "request" "${TFILES}${STEP}"  "logoff using invalid cookie token"
 fi
 
-# #------------------------------------------------------------------------------
-# #  TEST d
-# #
-# #  Read the rentsteps for RSLID 4
-# #  Write rentsteps
-# #
-# #  Scenario:
-# #  login
-# #  read rentsteps
-# #
-# #  Expected Results:
-# #   1. Expecting 3 rent step items
-# #   2. Write 4 rent steps back.  Only 1 change (added a new one)
-# #------------------------------------------------------------------------------
-# TFILES="d"
-# STEP=0
-# if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
-#     mysql --no-defaults plato < xb.sql
-#     login
-#     encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0}'
-#     dojsonPOST "http://localhost:${SVCPORT}/v1/rentsteps/4" "request" "${TFILES}${STEP}"  "RentSteps"
+#------------------------------------------------------------------------------
+#  TEST d
 #
-#     # Add one, remove one, and change one...
-#     encodeRequest '{"cmd":"save","records":[{"recid":6,"RSID":6,"RSLID":4,"Dt":"1/1/2018","Opt":"Year 1","Rent":3500,"FLAGS":0},{"recid":8,"RSID":8,"RSLID":4,"Dt":"1/1/2020","Opt":"Year 3","Rent":3300,"FLAGS":0},{"recid":-1,"RSLID":0,"RSID":-1,"Opt":"asdfasdf","Dt":"Wed, 01 Jan 2020 08:00:00 GMT","Rent":3333,"FLAGS":0}]}'
-#     dojsonPOST "http://localhost:${SVCPORT}/v1/rentsteps/4" "request" "${TFILES}${STEP}"  "RentSteps"
+#  Read the Items
 #
-#     # Change all of them to DATE based, and change 1 date
-#     encodeRequest '{"cmd":"save","records":[{"recid":6,"RSID":6,"RSLID":4,"Dt":"1/1/2018","Opt":"Year 1","Rent":3500,"FLAGS":1},{"recid":8,"RSID":8,"RSLID":4,"Dt":"1/1/2020","Opt":"Year 3","Rent":3300,"FLAGS":1},{"recid":-1,"RSLID":0,"RSID":-1,"Opt":"asdfasdf","Dt":"Wed, 15 Jan 2020 08:00:00 GMT","Rent":3333,"FLAGS":1}]}'
-#     dojsonPOST "http://localhost:${SVCPORT}/v1/rentsteps/4" "request" "${TFILES}${STEP}"  "RentSteps"
-# fi
+#  Scenario:
 #
+#  Expected Results:
+#------------------------------------------------------------------------------
+TFILES="d"
+STEP=0
+if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFILES}${TFILES}" ]; then
+    loadDB xb.sql
+    login
+
+    # Search with no conditions
+    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0}'
+    dojsonPOST "http://localhost:${SVCPORT}/v1/item" "request" "${TFILES}${STEP}"  "Item search"
+
+    # Search for "market"
+    encodeRequest '{"cmd":"get","selected":[],"search":[{"field":"","type":"text","operator":"begins","value":"market"}],"limit":10,"offset":0}'
+    dojsonPOST "http://localhost:${SVCPORT}/v1/item" "request" "${TFILES}${STEP}"  "Item search"
+
+    # # Add one, remove one, and change one...
+    # encodeRequest '{"cmd":"save","records":[{"recid":6,"RSID":6,"RSLID":4,"Dt":"1/1/2018","Opt":"Year 1","Rent":3500,"FLAGS":0},{"recid":8,"RSID":8,"RSLID":4,"Dt":"1/1/2020","Opt":"Year 3","Rent":3300,"FLAGS":0},{"recid":-1,"RSLID":0,"RSID":-1,"Opt":"asdfasdf","Dt":"Wed, 01 Jan 2020 08:00:00 GMT","Rent":3333,"FLAGS":0}]}'
+    # dojsonPOST "http://localhost:${SVCPORT}/v1/rentsteps/4" "request" "${TFILES}${STEP}"  "RentSteps"
+    #
+    # # Change all of them to DATE based, and change 1 date
+    # encodeRequest '{"cmd":"save","records":[{"recid":6,"RSID":6,"RSLID":4,"Dt":"1/1/2018","Opt":"Year 1","Rent":3500,"FLAGS":1},{"recid":8,"RSID":8,"RSLID":4,"Dt":"1/1/2020","Opt":"Year 3","Rent":3300,"FLAGS":1},{"recid":-1,"RSLID":0,"RSID":-1,"Opt":"asdfasdf","Dt":"Wed, 15 Jan 2020 08:00:00 GMT","Rent":3333,"FLAGS":1}]}'
+    # dojsonPOST "http://localhost:${SVCPORT}/v1/rentsteps/4" "request" "${TFILES}${STEP}"  "RentSteps"
+fi
+
 # #------------------------------------------------------------------------------
 # #  TEST e
 # #

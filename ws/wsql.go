@@ -73,6 +73,14 @@ func gridBuildQuery(table, srch, order string, d *ServiceData, p interface{}) (s
 	return gridBuildQueryWhereClause(q, table, srch, order, d, p)
 }
 
+// INPUTS
+//       q = existing query
+//   table = table to search
+//    srch = default search
+//   order = default ordering
+//       d = service data
+//       p = pointer to the structure of database record into which values will be read
+//------------------------------------------------------------------------------
 func gridBuildQueryWhereClause(q, table, srch, order string, d *ServiceData, p interface{}) (string, string) {
 	qw := ""
 	if len(d.wsSearchReq.Search) > 0 {

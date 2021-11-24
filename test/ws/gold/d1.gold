@@ -1,0 +1,126 @@
+{
+    "records": [
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:49 UTC",
+            "Description": "Jeep Wrangler\u2019s first plug-in hybrid for the U.S. market complicates the driving experience in pursuit of regulatory credits and buyer incentives. And for most drivers, writes Dan Neil, it will get poor fuel economy.",
+            "IID": 94,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:49 UTC",
+            "Link": "https://www.wsj.com/articles/2021-jeep-wrangler-unlimited-rubicon-4xe-a-hybrid-that-comes-up-short-11632498123",
+            "PubDt": "2021-09-24 11:42:00 UTC",
+            "Title": "2021 Jeep Wrangler Unlimited Rubicon 4xe: A Hybrid That Comes Up Short",
+            "recid": 0
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:57:10 UTC",
+            "Description": "The authorities in Italy are investigating dozens of transfers involving top clubs. In doing so, they might pull back the curtain on accounting practices that defy easy explanation.",
+            "IID": 873,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:57:10 UTC",
+            "Link": "https://www.nytimes.com/2021/11/16/sports/soccer/juventus-plusvalenza-italy-serie-a.html",
+            "PubDt": "2021-11-17 04:29:56 UTC",
+            "Title": "A Transfer Market Mystery: What&#39;s a Player Worth?",
+            "recid": 1
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:48 UTC",
+            "Description": "The videogame publisher has shed a third of its market value as doubts about management\u2019s ability to fix its workplace culture have grown.",
+            "IID": 54,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:48 UTC",
+            "Link": "https://www.wsj.com/articles/activision-really-needs-to-hit-the-reset-button-11637334894?mod=rss_markets_main",
+            "PubDt": "2021-11-19 10:14:00 UTC",
+            "Title": "Activision Needs to Hit the Reset Button",
+            "recid": 2
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:57:15 UTC",
+            "Description": "Prosecutors said Inigo Philbrick, who admitted he duped investors who joined him in the purchase of blue-chip art, took advantage of the opacity of the art market.",
+            "IID": 1079,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:57:15 UTC",
+            "Link": "https://www.nytimes.com/2021/11/18/arts/inigo-philbrick-pleads-guilty-art-scam.html",
+            "PubDt": "2021-11-19 00:38:12 UTC",
+            "Title": "Art Dealer Pleads Guilty to Wire Fraud Charges in $86 Million Scam",
+            "recid": 3
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:57:01 UTC",
+            "Description": "Has the president found a corner of the market that has faith in his pledge to contain rising prices?",
+            "IID": 619,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:57:01 UTC",
+            "Link": "https://www.nytimes.com/2021/11/12/business/dealbook/biden-inflation-bonds.html",
+            "PubDt": "2021-11-12 17:38:54 UTC",
+            "Title": "Bond Investors May Believe Biden&#39;s Inflation Pledge",
+            "recid": 4
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:48 UTC",
+            "Description": "The listing of the payment platform\u2019s parent, One97, is part of a wave of Indian tech IPOs.",
+            "IID": 78,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:48 UTC",
+            "Link": "https://www.wsj.com/articles/buffett-backed-indian-fintech-giant-paytm-stumbles-in-market-debut-11637227628?mod=rss_Technology",
+            "PubDt": "2021-11-18 07:53:00 UTC",
+            "Title": "Buffett-Backed Indian Fintech Giant Paytm Stumbles in Market Debut",
+            "recid": 5
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:59 UTC",
+            "Description": "Do what it takes to stay invested in the stock market, our columnist says. Government bonds may help, even if they look unappealing now.",
+            "IID": 490,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:59 UTC",
+            "Link": "https://www.nytimes.com/2021/11/19/business/stock-market-bonds-crash.html",
+            "PubDt": "2021-11-19 10:00:28 UTC",
+            "Title": "Buy Stocks to Prosper. Buy Bonds to Sleep at Night.",
+            "recid": 6
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:57:24 UTC",
+            "Description": "Eastern Mediterranean fare in Manhattan West, a Chelsea Market presence for an Italian maker of dried pasta, and more restaurant news.",
+            "IID": 1389,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:57:24 UTC",
+            "Link": "https://www.nytimes.com/2021/11/16/dining/new-york-restaurant-openings.html",
+            "PubDt": "2021-11-16 20:00:33 UTC",
+            "Title": "Caviar Russe in Midtown Opens a Lower-Level Bar and Lounge",
+            "recid": 7
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:51 UTC",
+            "Description": "A new review of early Covid-19 cases in the journal Science will revive, though certainly not settle, the debate over how the pandemic began.",
+            "IID": 226,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:51 UTC",
+            "Link": "https://www.nytimes.com/2021/11/18/health/covid-wuhan-market-lab-leak.html",
+            "PubDt": "2021-11-19 03:45:26 UTC",
+            "Title": "First Known Covid Case Was Vendor at Wuhan Market, Scientist Says",
+            "recid": 8
+        },
+        {
+            "CreateBy": -99998,
+            "CreateTime": "2021-11-19 15:56:48 UTC",
+            "Description": "While financial markets expect today\u2019s profit bonanza in the shipping industry to fade, aviation executives are putting their faith in freighters.",
+            "IID": 56,
+            "LastModBy": -99998,
+            "LastModTime": "2021-11-19 15:56:48 UTC",
+            "Link": "https://www.wsj.com/articles/for-airbus-and-boeing-inflation-in-airfreight-may-also-prove-temporary-11637331443?mod=rss_markets_main",
+            "PubDt": "2021-11-19 09:17:00 UTC",
+            "Title": "For Airbus and Boeing, Inflation in Airfreight May Also Prove Temporary",
+            "recid": 9
+        }
+    ],
+    "status": "success",
+    "total": 21
+}
