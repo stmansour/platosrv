@@ -1,5 +1,5 @@
 /*global
-    $, window, w2ui, document,
+    $, window, w2ui, document, console,
     parseInt, w2ui, app, getExchInitRecord, updateBUDFormList, renderMoney,
 */
 
@@ -7,7 +7,7 @@
 
 var exchMeta = {
     Dt: "",
-    Tickers: ["AUDUSD"],
+    Tickers: ["AUDUSD","NZDJPY","GBPAUD"],
 };
 
 function exchInit() {
@@ -30,6 +30,11 @@ function updateExchDate() {
         return;
     }
     if (dt.value == "") {
+        return;
+    }
+    var ds = dt.value;
+    var dd = new Date(ds);
+    if (dd.getFullYear() < 2011) {
         return;
     }
     exchMeta.Dt = dt.value;
@@ -135,6 +140,11 @@ window.buildExchMethodElements = function () {
             }
         },
         onLoad: function(event) {
+            exchMeta.Tickers = this.toolbar.get("tickers").selected;
+            w2ui.exchGrid.postData = {
+                Dt: exchMeta.Dt,
+                Tickers: exchMeta.Tickers,
+            };
             event.onComplete = function() {
                 var txt = document.getElementById("exchDt");
                 txt.onchange = updateExchDate;
@@ -155,5 +165,18 @@ window.buildExchMethodElements = function () {
                 return html1;
             },
         },
+        { type: 'break' },
+        { type: 'menu-check', id: 'tickers', text: 'Tickers', icon: 'fa fa-exchange',
+            selected: ['AUDUSD', 'NZDJPY', 'GBPAUD'],
+            onRefresh: function (event) {
+                event.item.count = event.item.selected.length;
+            },
+            items: [
+                { id: 'AUDUSD', text: 'AUDUSD', icon: 'fa fa-usd' },
+                { id: 'NZDJPY', text: 'NZDJPY', icon: 'fa fa-yen' },
+                { id: 'GBPAUD', text: 'GBPAUD', icon: 'fa fa-gbp' },
+            ],
+        },
     ]);
+
 };

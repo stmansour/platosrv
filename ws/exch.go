@@ -230,7 +230,6 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		return
 	}
 
-	util.Console("%s: A\n", funcname)
 	var exchSRD ExchSearchRequestJSON
 	err = json.Unmarshal([]byte(d.data), &exchSRD)
 	if err != nil {
@@ -239,8 +238,6 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		return
 	}
 
-	util.Console("%s: B\n", funcname)
-
 	var srd ExchSearchRequest
 	if err = util.MigrateStructVals(&exchSRD, &srd); err != nil {
 		e := fmt.Errorf("%s: Error with MigrateStructVals:  %s", funcname, err.Error())
@@ -248,12 +245,11 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		return
 	}
 
-	util.Console("%s: C\n", funcname)
-	// Defaults if date was not specified is to set date range to yesterday
+	// Default: if date was not specified just use yesterday's exchange rates
+	//--------------------------------------------------------------------------
 	if srd.Dt.Year() < db.MINYEAR {
 		srd.Dt = time.Now().Add(-24 * time.Hour)
 	}
-	util.Console("%s: D\n", funcname)
 
 	whr := ""
 	order := `Exch.Dt ASC` // default ORDER

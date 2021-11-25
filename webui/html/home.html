@@ -226,8 +226,8 @@ function buildPageElements() {
             { id: 'view', text: 'View', img: 'icon-folder', expanded: true, group: true,
                 nodes: [
                         { id: 'dashboard', text: 'Dashboard', icon: 'fa fa-tachometer' },
-                        { id: 'exch',      text: 'Exchange',  icon: 'fa fa-building' },
-                        { id: 'item',      text: 'Items',     icon: 'fa fa-building' },
+                        { id: 'exch',      text: 'Exchange',  icon: 'fa fa-money' },
+                        { id: 'item',      text: 'Items',     icon: 'fa fa-newspaper-o' },
                 ]
             },
         ],
@@ -240,6 +240,7 @@ function buildPageElements() {
                     w2ui.toplayout.hide('right',true);
                     break;
                 case 'exch':
+                case 'item':
                     grid = event.target + 'Grid';
                     w2ui[grid].url = '/v' + app.protocolVersion + '/' + event.target + '/';
                     w2ui.toplayout.content('main', w2ui[grid]);
@@ -251,6 +252,8 @@ function buildPageElements() {
 
     buildExchMethodElements();
     exchInit();
+    buildItemMethodElements();
+    itemInit();
     // buildRentStepsUIElements();
     // buildRenewOptionsUIElements();
     // buildTrafficUIElements();
