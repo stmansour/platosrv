@@ -147,8 +147,9 @@ window.buildExchMethodElements = function () {
             };
             event.onComplete = function() {
                 var txt = document.getElementById("exchDt");
-                txt.onchange = updateExchDate;
-
+                if (typeof txt != "undefined" && txt != null) {
+                    txt.onchange = updateExchDate;
+                }
             };
         },
     });

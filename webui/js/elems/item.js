@@ -142,7 +142,6 @@ window.buildItemMethodElements = function () {
         ],
     );
     w2ui.itemGrid.toolbar.onClick = function(event) {
-        console.log('event.target = ' + event.target);
         switch (event.target) {
             case 'ClearItemDt':
                 var id = getItemDateId();

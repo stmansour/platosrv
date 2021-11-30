@@ -27,3 +27,12 @@ package:
 secure:
 	for dir in $(DIRS); do make -C $${dir} secure;done
 	@rm -f config.json confdev.json confprod.json
+
+backup:
+	/usr/local/bin/mysqldump --no-defaults plato > plato.sql
+	gzip -f plato.sql
+
+db:
+	gunzip -f plato.sql.gz
+	/usr/local/bin/mysql --no-defaults plato < plato.sql
+	gzip -f plato.sql
