@@ -33,6 +33,6 @@ backup:
 	gzip -f plato.sql
 
 db:
-	gunzip -f plato.sql.gz
-	/usr/local/bin/mysql --no-defaults plato < plato.sql
-	gzip -f plato.sql
+	if [ -f plato.sql.gz ]; then gunzip -f plato.sql.gz; fi
+	if [ -f plato.sql ]; then /usr/local/bin/mysql --no-defaults plato < plato.sql; fi
+	if [ -f plato.sql ]; then gzip -f plato.sql; fi

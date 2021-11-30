@@ -21,7 +21,7 @@ all: clean plato package test stats dbprod
 build: clean plato package
 
 dbprod:
-	cd test;if [ -f plato.sql ]; then /usr/local/bin/mysql --no-defaults plato < plato.sql; fi
+	cd test;make db
 
 release:
 	/usr/local/accord/bin/release.sh plato
