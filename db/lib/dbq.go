@@ -13,4 +13,14 @@ type PrepSQL struct {
 	InsertItem *sql.Stmt
 	UpdateItem *sql.Stmt
 	DeleteItem *sql.Stmt
+
+	GetRSSFeed    *sql.Stmt
+	InsertRSSFeed *sql.Stmt
+	UpdateRSSFeed *sql.Stmt
+	DeleteRSSFeed *sql.Stmt
+
+	GetItemFeed    *sql.Stmt
+	InsertItemFeed *sql.Stmt
+	UpdateItemFeed *sql.Stmt
+	DeleteItemFeed *sql.Stmt
 }

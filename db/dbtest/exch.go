@@ -6,6 +6,7 @@ import (
 	"os"
 	db "platosrv/db/lib"
 	util "platosrv/util/lib"
+	"strings"
 	"time"
 )
 
@@ -97,4 +98,128 @@ func TestExch(ctx context.Context) {
 	}
 
 	fmt.Printf("Success! Delete, Get, Insert, and Update Exch\n")
+}
+
+// TestRSSFeed checks the basic db functions for the RSSFeed struct
+//-----------------------------------------------------------------------------
+func TestRSSFeed(ctx context.Context) {
+	var err error
+	var r db.RSSFeed
+	var id, id2 int64
+	r.URL = "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+	r.FLAGS = int64(0)
+	if id, err = db.InsertRSSFeed(ctx, &r); err != nil {
+		fmt.Printf("Error inserting RSSFeed: %s\n", err)
+		os.Exit(1)
+	}
+	if id != r.RSSID {
+		fmt.Printf("Error id does not match RSSID\n")
+		os.Exit(1)
+	}
+
+	var r2 db.RSSFeed
+	r2.URL = "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
+	if _, err = db.InsertRSSFeed(ctx, &r2); err != nil { // this should fail because we already have that URL
+		// make sure this is error 1062
+		if !strings.Contains(err.Error(), "Error 1062: Duplicate") {
+			fmt.Printf("Duplicate key was added to RSSFeed table!!!\n")
+			os.Exit(1)
+		}
+	}
+	r2.URL = "https://rss.nytimes.com/services/xml/rss/nyt/Education.xml"
+	if id2, err = db.InsertRSSFeed(ctx, &r2); err != nil {
+		fmt.Printf("Error inserting RSSFeed: %s\n", err)
+		os.Exit(1)
+	}
+	if id2 != r2.RSSID {
+		fmt.Printf("Error id2 does not match RSSID\n")
+		os.Exit(1)
+	}
+	// now update it
+	r2.URL = "https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml"
+	if err = db.UpdateRSSFeed(ctx, &r2); err != nil {
+		fmt.Printf("Error updating RSSFeed: %s\n", err)
+		os.Exit(1)
+	}
+	if err = db.DeleteRSSFeed(ctx, r2.RSSID); err != nil {
+		fmt.Printf("Error deleting RSSFeed: %s\n", err)
+		os.Exit(1)
+	}
+
+	// add a few more so we have more than one in the db...
+	var feeds = []string{"Space", "Computers", "Business", "NYReligion"}
+	for i := 0; i < len(feeds); i++ {
+		r2.URL = fmt.Sprintf("https://rss.nytimes.com/services/xml/rss/nyt/%s.xml", feeds[i])
+		if id2, err = db.InsertRSSFeed(ctx, &r2); err != nil {
+			fmt.Printf("Error inserting RSSFeed: %s\n", err)
+			os.Exit(1)
+		}
+		if id2 != r2.RSSID {
+			fmt.Printf("Error id2 does not match RSSID\n")
+			os.Exit(1)
+		}
+	}
+	fmt.Printf("Success! Delete, Get, Insert, and Update RSSFeed\n")
+}
+
+// TestItemFeed checks the basic db functions for the ItemFeed struct
+//-----------------------------------------------------------------------------
+func TestItemFeed(ctx context.Context) {
+	var err error
+	var r db.ItemFeed
+	var id, id2 int64
+	r.RSSID = 1
+	r.IID = 1
+	if id, err = db.InsertItemFeed(ctx, &r); err != nil {
+		fmt.Printf("Error inserting ItemFeed: %s\n", err)
+		os.Exit(1)
+	}
+	if id != r.IFID {
+		fmt.Printf("Error id does not match IFID\n")
+		os.Exit(1)
+	}
+
+	var r2 db.ItemFeed
+	r2.IID = 1
+	r2.RSSID = 1
+	if _, err = db.InsertItemFeed(ctx, &r2); err != nil { // this should fail because we already have that URL
+		// make sure this is error 1062
+		if !strings.Contains(err.Error(), "Error 1062: Duplicate") {
+			fmt.Printf("Duplicate key was added to ItemFeed table!!!\n")
+			os.Exit(1)
+		}
+	}
+	r2.IID = 2
+	r2.RSSID = 1
+	if id2, err = db.InsertItemFeed(ctx, &r2); err != nil {
+		fmt.Printf("Error inserting ItemFeed: %s\n", err)
+		os.Exit(1)
+	}
+	if id2 != r2.IFID {
+		fmt.Printf("Error id2 does not match IFID\n")
+		os.Exit(1)
+	}
+	// now update it
+	r2.IID = 3
+	if err = db.UpdateItemFeed(ctx, &r2); err != nil {
+		fmt.Printf("Error updating ItemFeed: %s\n", err)
+		os.Exit(1)
+	}
+	// Insert an itemFeed and delete it
+	r2.IFID = 0
+	r2.IID = 4
+	r2.RSSID = 1
+	if id2, err = db.InsertItemFeed(ctx, &r2); err != nil {
+		fmt.Printf("Error inserting ItemFeed: %s\n", err)
+		os.Exit(1)
+	}
+	if id2 != r2.IFID {
+		fmt.Printf("Error id2 does not match IFID\n")
+		os.Exit(1)
+	}
+	if err = db.DeleteItemFeed(ctx, r2.IFID); err != nil {
+		fmt.Printf("Error deleting ItemFeed: %s\n", err)
+		os.Exit(1)
+	}
+	fmt.Printf("Success! Delete, Get, Insert, and Update ItemFeed\n")
 }

@@ -15,6 +15,14 @@
             {
                 "Name": "Exch",
                 "Size": 32768
+            },
+            {
+                "Name": "RSSFeed",
+                "Size": 32768
+            },
+            {
+                "Name": "ItemFeed",
+                "Size": 32768
             }
         ]
     },

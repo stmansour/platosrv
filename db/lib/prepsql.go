@@ -19,7 +19,7 @@ var myRpl = mySQLRpl
 //  we return these five strings:
 //  1)  "BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModBy"                 -- use for SELECT
 //  2)  "?,?,?,?,?,?,?,?"  														-- use for INSERT
-//  3)  "BID=?RAID=?,GLNumber=?,Status=?,Type=?,Name=?,AcctType=?,LastModBy=?"  -- use for UPDATE
+//  3)  "BID=?,RAID=?,GLNumber=?,Status=?,Type=?,Name=?,AcctType=?,LastModBy=?" -- use for UPDATE
 //  4)  "LID,BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModBy", 			-- use for INSERT (no PRIMARYKEY), add "WHERE LID=?"
 //  5)  "?,?,?,?,?,?,?,?,?"  													-- use for INSERT (no PRIMARYKEY)
 //
@@ -116,6 +116,35 @@ func BuildPreparedStatements() {
 	Pdb.Prepstmt.UpdateItem, err = Pdb.DB.Prepare("UPDATE Item SET " + s3 + " WHERE IID=?")
 	Errcheck(err)
 	Pdb.Prepstmt.DeleteItem, err = Pdb.DB.Prepare("DELETE from Item WHERE IID=?")
+	Errcheck(err)
+
+	//==========================================
+	// RSSFeed
+	//==========================================
+	flds = "RSSID,URL,FLAGS,CreateTime,CreateBy,LastModTime,LastModBy"
+	Pdb.DBFields["RSSFeed"] = flds
+	Pdb.Prepstmt.GetRSSFeed, err = Pdb.DB.Prepare("SELECT " + flds + " FROM RSSFeed WHERE RSSID=?")
+	Errcheck(err)
+	s1, s2, s3, _, _ = GenSQLInsertAndUpdateStrings(flds)
+	Pdb.Prepstmt.InsertRSSFeed, err = Pdb.DB.Prepare("INSERT INTO RSSFeed (" + s1 + ") VALUES(" + s2 + ")")
+	Errcheck(err)
+	Pdb.Prepstmt.UpdateRSSFeed, err = Pdb.DB.Prepare("UPDATE RSSFeed SET " + s3 + " WHERE RSSID=?")
+	Errcheck(err)
+	Pdb.Prepstmt.DeleteRSSFeed, err = Pdb.DB.Prepare("DELETE from RSSFeed WHERE RSSID=?")
+	Errcheck(err)
+
+	//==========================================
+	// ItemFeed
+	//==========================================
+	flds = "IFID,IID,RSSID"
+	Pdb.DBFields["ItemFeed"] = flds
+	Pdb.Prepstmt.GetItemFeed, err = Pdb.DB.Prepare("SELECT " + flds + " FROM ItemFeed WHERE IFID=?")
+	Errcheck(err)
+	Pdb.Prepstmt.InsertItemFeed, err = Pdb.DB.Prepare("INSERT INTO ItemFeed (IID,RSSID) VALUES(?,?)")
+	Errcheck(err)
+	Pdb.Prepstmt.UpdateItemFeed, err = Pdb.DB.Prepare("UPDATE ItemFeed SET IID=?,RSSID=? WHERE IFID=?")
+	Errcheck(err)
+	Pdb.Prepstmt.DeleteItemFeed, err = Pdb.DB.Prepare("DELETE from ItemFeed WHERE IFID=?")
 	Errcheck(err)
 
 }

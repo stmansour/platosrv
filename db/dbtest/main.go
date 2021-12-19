@@ -82,4 +82,6 @@ func main() {
 
 	TestExch(ctx)
 	TestItem(ctx)
+	TestRSSFeed(ctx)
+	TestItemFeed(ctx)
 }
