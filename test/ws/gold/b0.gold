@@ -10,18 +10,18 @@
         "Tables": [
             {
                 "Name": "Item",
-                "Size": 638976
+                "Size": 32768
             },
             {
                 "Name": "Exch",
                 "Size": 32768
             },
             {
-                "Name": "ItemFeed",
+                "Name": "RSSFeed",
                 "Size": 32768
             },
             {
-                "Name": "RSSFeed",
+                "Name": "ItemFeed",
                 "Size": 32768
             }
         ]

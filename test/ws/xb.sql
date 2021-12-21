@@ -36,7 +36,7 @@ CREATE TABLE `Exch` (
   `CreateBy` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`XID`),
   UNIQUE KEY `Alpha` (`Dt`,`Ticker`)
-) ENGINE=InnoDB AUTO_INCREMENT=4321 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `Item` (
   `CreateBy` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`IID`),
   UNIQUE KEY `Link` (`Link`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `ItemFeed` (
   `RSSID` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`IFID`),
   UNIQUE KEY `Beta` (`IID`,`RSSID`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +124,7 @@ CREATE TABLE `RSSFeed` (
   `CreateBy` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`RSSID`),
   UNIQUE KEY `URL` (`URL`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
