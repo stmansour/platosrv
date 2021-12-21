@@ -9,7 +9,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"phonebook/lib"
 	db "platosrv/db/lib"
 	"platosrv/session"
 	util "platosrv/util/lib"
@@ -74,7 +73,7 @@ func main() {
 	// Open the logfile and begin logging...
 	//==============================================
 	App.LogFile, err = os.OpenFile("platosrv.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	lib.Errcheck(err)
+	util.ErrCheck(err)
 	defer App.LogFile.Close()
 	log.SetOutput(App.LogFile)
 	util.Ulog("*** platosrv CURRENCY EXCHANGE ANALYSIS ***\n")

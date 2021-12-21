@@ -188,11 +188,11 @@ if [ "${SINGLETEST}${TFILES}" = "${TFILES}" -o "${SINGLETEST}${TFILES}" = "${TFI
     dojsonPOST "http://localhost:${SVCPORT}/v1/item" "request" "${TFILES}${STEP}"  "Item search by text"
 
     # Search by date
-    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0,"PubDt":"11/19/2021"}'
+    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0,"PubDt":"12/20/2021"}'
     dojsonPOST "http://localhost:${SVCPORT}/v1/item" "request" "${TFILES}${STEP}"  "Item search by date"
 
     # Search by text AND date
-    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0,"PubDt":"11/19/2021","search":[{"field":"","type":"text","operator":"begins","value":"market"}]}'
+    encodeRequest '{"cmd":"get","selected":[],"limit":100,"offset":0,"PubDt":"12/20/2021","search":[{"field":"","type":"text","operator":"begins","value":"market"}]}'
     dojsonPOST "http://localhost:${SVCPORT}/v1/item" "request" "${TFILES}${STEP}"  "Item search by date"
 fi
 
