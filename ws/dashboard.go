@@ -102,8 +102,7 @@ func getDashboard(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		WHERE
 			TABLE_SCHEMA="plato"
 		ORDER BY
-			(DATA_LENGTH + INDEX_LENGTH)
-		DESC;`)
+			TABLE_NAME ASC;`)
 	if err != nil {
 		SvcErrorReturn(w, err)
 		return

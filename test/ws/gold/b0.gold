@@ -9,19 +9,19 @@
         "ItemDtMin": "2021-12-18T07:13:00Z",
         "Tables": [
             {
-                "Name": "Item",
-                "Size": 32768
-            },
-            {
                 "Name": "Exch",
                 "Size": 32768
             },
             {
-                "Name": "RSSFeed",
+                "Name": "Item",
                 "Size": 32768
             },
             {
                 "Name": "ItemFeed",
+                "Size": 32768
+            },
+            {
+                "Name": "RSSFeed",
                 "Size": 32768
             }
         ]
