@@ -1033,6 +1033,7 @@ dojsonPOST () {
 			's/(^[ \t]+"ApproverDt":).*/$1 TIMESTAMP/'
 			's/(^[ \t]+"OwnerDt":).*/$1 TIMESTAMP/'
 			's/(^[ \t]+"Token":).*/$1 TOKEN/'
+			's/(^[ \t]+"Size":).*/$1 SIZEVARIES/'
 			's/(^[ \t]+"Expire":).*/$1 TIMESTAMP/'
 		)
 		cp gold/${3}.gold qqx
