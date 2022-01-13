@@ -306,6 +306,9 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	queryWithLimit := query + limitAndOffsetClause
 
 	// Add limit and offset value
+	if d.wsSearchReq.Limit <= 0 || d.wsSearchReq.Limit > 500) {
+		d.wsSearchReq.Limit = 500
+	}
 	qc["LimitClause"] = strconv.Itoa(d.wsSearchReq.Limit)
 	qc["OffsetClause"] = strconv.Itoa(d.wsSearchReq.Offset)
 

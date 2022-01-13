@@ -93,7 +93,7 @@ func getDashboard(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	}
 
 	var rr TableSizeInfo
-	rows, err := db.Pdb.DB.Query(`
+	q := `
 		SELECT
 			TABLE_NAME AS "Table",
 			ROUND((DATA_LENGTH + INDEX_LENGTH)) AS "Size"
@@ -102,7 +102,9 @@ func getDashboard(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		WHERE
 			TABLE_SCHEMA="plato"
 		ORDER BY
-			TABLE_NAME ASC;`)
+			TABLE_NAME ASC;`
+	rows, err := db.Pdb.DB.Query(q)
+	
 	if err != nil {
 		SvcErrorReturn(w, err)
 		return

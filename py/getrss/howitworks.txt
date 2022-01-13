@@ -1,0 +1,32 @@
+How The Scripts In This Directory Operate
+
+1. run wbp.sh to download the entire WayBack Machine's archive of each
+   RSS Feed.  You can also use the -u (update) command to have it only download
+   the archives created on or after that latest date found in the database for
+   the RSS feeds.
+
+        * Edit the source first to set DEST to where the full xml feed
+          archive can be downloaded.
+
+2. After downloading the full (or partial) feed, wbp.sh calls unpack.sh to
+   unpack the directory structure it downloads.
+
+3. unpack.sh creates a script named doit.sh to process all the directories
+   downloaded.
+
+4. doit.sh does the following:
+        * cleans up the RSS Feed files in every directory to remove Unicode
+          chars
+        * then calls chomp.py on every directory
+
+5. chomp.py processes an xml feed and updates the database for each item.
+
+6. Each feed gets processed through all these scripts fully before it starts on
+   the next one.  When it finishes, wpb.sh updates a file called completed.txt
+   with the url of the RSS feed that it just completed processing.
+   So, completed.txt lists a particular RSS feed url when all
+   processing of that url has been completed. This was done so that if we are
+   building the database and it crashes, we can see how far it got and
+   (potentially) continue from that point in the list of RSS feeds once the
+   issue has been addressed. When building the database from scratch (for all
+   time), this can save a lot of time.
