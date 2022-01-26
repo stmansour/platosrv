@@ -1,8 +1,12 @@
-DIRS=anomoly getexch getdata getrss jup
+DIRS=getexch getrss
 THISDIR=py
 
 all:
 	@echo "build completed"
+
+clean:
+	for dir in $(DIRS); do make -C $$dir clean;done
+	@echo "clean completed in ${THISDIR}"
 
 test:
 	for dir in $(DIRS); do make -C $$dir test;done

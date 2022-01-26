@@ -12,6 +12,7 @@ cleanall: clean
 	rm *.csv
 
 package:
+	mkdir -p ${DIST}
 	cp *.py *.sh *.txt ${DIST}/
 
 test:

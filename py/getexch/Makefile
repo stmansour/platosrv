@@ -12,4 +12,5 @@ test:
 	echo "Done in ${THISDIR}"
 
 package:
+	mkdir -p ${DIST}
 	cp *.sh *.py ${DIST}/

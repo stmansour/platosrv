@@ -1,4 +1,4 @@
-DIRS=util session db ws server webui test
+DIRS=util session db ws py server webui test
 DIST=dist
 .PHONY: test
 
