@@ -18,7 +18,7 @@ import ticker
 #
 #  Example Usage:
 #
-#   bash$  python3 process.py  myfile.csv
+#   bash$  python3 processexch.py  myfile.csv
 #------------------------------------------------------------------------------
 
 def Main():

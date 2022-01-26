@@ -1,11 +1,18 @@
-THISDIR=py/getrss
+THISDIR=py/getexch
 TOPDIR=../..
 DIST=${TOPDIR}/dist/plato
 
 getdata:
-	echo "**** Finished in getdata
+	echo "**** Finished in ${THISDIR}"
+
 clean:
 	rm -rf xxx tmprss completed.txt doit.sh
 
 cleanall: clean
 	rm *.csv
+
+package:
+	cp *.py *.sh *.txt ${DIST}/
+
+test:
+	echo "Done in ${THISDIR}"

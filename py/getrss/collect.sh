@@ -4,6 +4,7 @@
 
 TMPRSS="tmprss"
 OUTFILE="nytimesrss.csv"
+DEBUG=0
 
 declare -a urls=(
   "https://feeds.a.dj.com/rss/RSSOpinion.xml"
@@ -101,6 +102,12 @@ $ ./collect.sh https://feeds.a.dj.com/rss/RSSMarketsMain.xml
   Process only https://feeds.a.dj.com/rss/RSSMarketsMain.xml
 FEOF
 
+}
+
+function Trace() {
+    if (( DEBUG > 0 )); then
+        echo $1
+    fi
 }
 
 # process  -   process the rss feeds

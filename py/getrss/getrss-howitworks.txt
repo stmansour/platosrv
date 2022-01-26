@@ -1,4 +1,4 @@
-How The Scripts In This Directory Operate
+How the Scripts Collect RSS Feeds
 
 1. run wbp.sh to download the entire WayBack Machine's archive of each
    RSS Feed.  You can also use the -u (update) command to have it only download
@@ -30,3 +30,5 @@ How The Scripts In This Directory Operate
    (potentially) continue from that point in the list of RSS feeds once the
    issue has been addressed. When building the database from scratch (for all
    time), this can save a lot of time.
+
+7.

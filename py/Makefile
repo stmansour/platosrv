@@ -1,4 +1,4 @@
-DIRS=anomoly exchdb getdata getrss jup
+DIRS=anomoly getexch getdata getrss jup
 THISDIR=py
 
 all:

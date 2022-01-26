@@ -17,7 +17,7 @@
 # EURUSD,20110102,230300,1.3341,1.3342,1.3341,1.3341
 # EURUSD,20110102,230400,1.3341,1.3343,1.3341,1.3343
 #
-# It is processed by the python program process.py
+# It is processed by the python program processexch.py
 #=======================================================================
 NEWDB=0         # assume we're just going to add to the current db
 MODE="today"    # all, today, ...
@@ -362,7 +362,7 @@ CheckCreateNewDB () {
 #-------------------------------------------------------------------------------
 #  ProcessExch  -  Pull information for DAY, MONTH, YEAR. Information
 #       for all Tickers is provided in the file we get from the URL. The
-#       Python program process.py extracts the information of interest.
+#       Python program processexch.py extracts the information of interest.
 #-------------------------------------------------------------------------------
 ProcessExch () {
     Trace "ProcessExch"
@@ -402,7 +402,7 @@ ProcessExch () {
     fi
     unzip -qq "${FNAME}"
     echo -n "..."
-    python3 process.py "${FTEXT}"
+    python3 processexch.py "${FTEXT}"
     if (( KEEP != 1 )); then
         rm -f "${FNAME}" "${FTEXT}"
     fi
@@ -442,7 +442,7 @@ Init () {
 #-------------------------------------------------------------------------------
 #  Main  -  Pull data STARTDATE to ENDDATE. Information
 #       for all Tickers is provided in the files we get from the URL. The
-#       Python program process.py extracts the information of interest.
+#       Python program processexch.py extracts the information of interest.
 #-------------------------------------------------------------------------------
 Main () {
     Trace "Main   MODE: ${MODE}"
