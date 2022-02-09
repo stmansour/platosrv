@@ -5,9 +5,10 @@
 
 DROP DATABASE IF EXISTS plato;
 CREATE DATABASE plato;
+GRANT ALL PRIVILEGES ON plato.* TO 'ec2-user'@'localhost';
+GRANT ALL PRIVILEGES ON plato.* TO 'adbuser'@'%';
 USE plato;
--- GRANT ALL PRIVILEGES ON plato.* TO 'ec2-user'@'localhost';
--- GRANT ALL PRIVILEGES ON plato.* TO 'adbuser'@'%';
+
 set GLOBAL sql_mode='ALLOW_INVALID_DATES';
 
 

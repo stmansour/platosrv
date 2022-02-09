@@ -198,7 +198,7 @@ func V1ServiceHandler(w http.ResponseWriter, r *http.Request) {
 	if sid < 0 {
 		// util.Console("debug> SVC: 04: sid = %d\n", sid)
 		util.Console("**** YIPES! **** %s - Handler not found\n", r.RequestURI)
-		e := fmt.Errorf("Service not recognized: %s", d.Service)
+		e := fmt.Errorf("service not recognized: %s", d.Service)
 		util.Console("***ERROR IN URL***  %s", e.Error())
 		SvcErrorReturn(w, e)
 		return
@@ -279,13 +279,13 @@ func svcGetPayload(w http.ResponseWriter, r *http.Request, d *ServiceData) error
 	if lpe > 2 { // ID, if any
 		d.ID, err = util.IntFromString(pathElements[2], "bad ID")
 		if err != nil {
-			return fmt.Errorf("ID in URL is invalid: %s", err.Error())
+			return fmt.Errorf("field ID in URL is invalid: %s", err.Error())
 		}
 	}
 	if lpe > 3 { // SUBID if any
 		d.SUBID, err = util.IntFromString(pathElements[3], "bad SUBID")
 		if err != nil {
-			return fmt.Errorf("SUBID in URL is invalid: %s", err.Error())
+			return fmt.Errorf("field SUBID in URL is invalid: %s", err.Error())
 		}
 	}
 	switch r.Method {
@@ -335,7 +335,7 @@ func SvcGetInt64(s, errmsg string, w http.ResponseWriter) (int64, error) {
 // 	sa := strings.Split(uri[1:], "/")
 // 	// util.Console("uri parts:  %v\n", sa)
 // 	if len(sa) < pos+1 {
-// 		err = fmt.Errorf("Expecting at least %d elements in URI: %s, but found only %d", pos+1, uri, len(sa))
+// 		err = fmt.Errorf("expecting at least %d elements in URI: %s, but found only %d", pos+1, uri, len(sa))
 // 		// util.Console("err = %s\n", err)
 // 		SvcErrorReturn(w, err)
 // 		return ID, err
@@ -403,39 +403,39 @@ func getPOSTdata(w http.ResponseWriter, r *http.Request, d *ServiceData) error {
 	return err
 }
 
-// hexdump will dump a maximum of 1000 characters of the request to the console
-// under the assumption that the data contains binary info. It provides a hex /
-// character dump of the data.
-//------------------------------------------------------------------------------
-func hexdump(data []byte) {
-	l := len(data)
-	util.Console("len(data) = %d\n", l)
-	if l > 1000 {
-		l = 1000
-		util.Console("note> will only dump the first %d bytes\n", l)
-	}
-	k := 0
-	bb := 0
-	for b := 0; b < l; b++ {
-		util.Console("%02x ", data[b])
-		k++
-		if k%16 == 0 {
-			k = 0
-			util.Console("   ")
-			for j := 0; j < 16; j++ {
-				var i = int(data[bb])
-				if 32 <= i && i < 127 {
-					util.Console("%c", data[bb])
-				} else {
-					util.Console(" ")
-				}
-				bb++
-			}
-			util.Console("\n")
-		}
-	}
-	util.Console("\n\n")
-}
+// // hexdump will dump a maximum of 1000 characters of the request to the console
+// // under the assumption that the data contains binary info. It provides a hex /
+// // character dump of the data.
+// //------------------------------------------------------------------------------
+// func hexdump(data []byte) {
+// 	l := len(data)
+// 	util.Console("len(data) = %d\n", l)
+// 	if l > 1000 {
+// 		l = 1000
+// 		util.Console("note> will only dump the first %d bytes\n", l)
+// 	}
+// 	k := 0
+// 	bb := 0
+// 	for b := 0; b < l; b++ {
+// 		util.Console("%02x ", data[b])
+// 		k++
+// 		if k%16 == 0 {
+// 			k = 0
+// 			util.Console("   ")
+// 			for j := 0; j < 16; j++ {
+// 				var i = int(data[bb])
+// 				if 32 <= i && i < 127 {
+// 					util.Console("%c", data[bb])
+// 				} else {
+// 					util.Console(" ")
+// 				}
+// 				bb++
+// 			}
+// 			util.Console("\n")
+// 		}
+// 	}
+// 	util.Console("\n\n")
+// }
 
 func getGETdata(w http.ResponseWriter, r *http.Request, d *ServiceData) error {
 	funcname := "getGETdata"
@@ -527,7 +527,7 @@ func svcDebugTxnEnd() {
 func SvcWriteResponse(g interface{}, w http.ResponseWriter) {
 	b, err := json.Marshal(g)
 	if err != nil {
-		e := fmt.Errorf("Error marshaling json data: %s", err.Error())
+		e := fmt.Errorf("error marshaling json data: %s", err.Error())
 		util.Ulog("SvcWriteResponse: %s\n", err.Error())
 		SvcErrorReturn(w, e)
 		return

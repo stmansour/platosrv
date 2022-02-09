@@ -47,7 +47,7 @@ func SvcAuthenticate(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	// util.Console("record data = %s\n", d.data)  // this has user's password, so try not to print (you may forget to remove it)
 
 	if err := json.Unmarshal([]byte(d.data), &a); err != nil {
-		e := fmt.Errorf("%s: Error with json.Unmarshal:  %s", funcname, err.Error())
+		e := fmt.Errorf("%s: error with json.Unmarshal:  %s", funcname, err.Error())
 		SvcFuncErrorReturn(w, e, funcname)
 		return
 	}
@@ -68,7 +68,7 @@ func SvcAuthenticate(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	//-----------------------------------------------------------------------
 	pbr, err := json.Marshal(&a)
 	if err != nil {
-		e := fmt.Errorf("Error marshaling json data: %s", err.Error())
+		e := fmt.Errorf("error marshaling json data: %s", err.Error())
 		util.Ulog("%s: %s\n", funcname, err.Error())
 		SvcFuncErrorReturn(w, e, funcname)
 		return
@@ -81,6 +81,11 @@ func SvcAuthenticate(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	url := db.Pdb.Config.AuthNHost + "v1/authenticate"
 	util.Console("posting request to: %s\n", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(pbr))
+	if err != nil {
+		e := fmt.Errorf("%s: failed to POST:  %s", funcname, err.Error())
+		SvcFuncErrorReturn(w, e, funcname)
+		return
+	}
 	req.Header.Set("Content-Type", "application/json")
 	util.Console("\n*** req = %#v\n\n", req)
 	client := &http.Client{}

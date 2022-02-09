@@ -60,7 +60,7 @@ func GetQueryCount(query string) (int64, error) {
 	var err error
 	de := Pdb.DB.QueryRow(countQuery).Scan(&count)
 	if de != nil {
-		err = fmt.Errorf("GetQueryCount: query=\"%s\"    err = %s", countQuery, de.Error())
+		err = fmt.Errorf("function GetQueryCount: query=\"%s\"    err = %s", countQuery, de.Error())
 	}
 	return count, err
 }

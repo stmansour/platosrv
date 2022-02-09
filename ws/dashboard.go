@@ -56,9 +56,8 @@ func SvcHandlerDashboard(w http.ResponseWriter, r *http.Request, d *ServiceData)
 	switch d.wsSearchReq.Cmd {
 	case "get":
 		getDashboard(w, r, d)
-		break
 	default:
-		err := fmt.Errorf("Unhandled command: %s", d.wsSearchReq.Cmd)
+		err := fmt.Errorf("unhandled command: %s", d.wsSearchReq.Cmd)
 		SvcErrorReturn(w, err)
 		return
 	}
@@ -104,7 +103,7 @@ func getDashboard(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		ORDER BY
 			TABLE_NAME ASC;`
 	rows, err := db.Pdb.DB.Query(q)
-	
+
 	if err != nil {
 		SvcErrorReturn(w, err)
 		return

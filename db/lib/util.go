@@ -12,7 +12,7 @@ import (
 )
 
 // ErrSessionRequired session required error
-var ErrSessionRequired = errors.New("Session Required, Please Login")
+var ErrSessionRequired = errors.New("session required, please login")
 
 // SkipSQLNoRowsError assing nil to original err variable
 // if its kind of no rows in result error from sql package
@@ -154,7 +154,7 @@ func GetRowCountRaw(table, joins, where string) (int64, error) {
 	util.Console("\n\nGetRowCountRaw: QUERY = %s\n", s)
 	de := Pdb.DB.QueryRow(s).Scan(&count)
 	if de != nil {
-		err = fmt.Errorf("GetRowCountRaw: query=\"%s\"    err = %s", s, de.Error())
+		err = fmt.Errorf("function GetRowCountRaw: query=\"%s\"    err = %s", s, de.Error())
 	}
 	return count, err
 }
@@ -277,17 +277,17 @@ func getRowFromDB(ctx context.Context, stmt *sql.Stmt, fields []interface{}) (*s
 // *sql.Row   - the database row to read
 // error      - any error encountered
 //-----------------------------------------------------------------------------
-func getRowsFromDB(ctx context.Context, stmt *sql.Stmt, fields []interface{}) (*sql.Stmt, *sql.Rows, error) {
-	var rows *sql.Rows
-	var err error
-	if tx, ok := TxFromContext(ctx); ok { // if transaction is supplied
-		stmt := tx.Stmt(stmt)
-		rows, err = stmt.Query(fields...)
-		return stmt, rows, err
-	}
-	rows, err = stmt.Query(fields...)
-	return nil, rows, err
-}
+// func getRowsFromDB(ctx context.Context, stmt *sql.Stmt, fields []interface{}) (*sql.Stmt, *sql.Rows, error) {
+// 	var rows *sql.Rows
+// 	var err error
+// 	if tx, ok := TxFromContext(ctx); ok { // if transaction is supplied
+// 		stmt := tx.Stmt(stmt)
+// 		rows, err = stmt.Query(fields...)
+// 		return stmt, rows, err
+// 	}
+// 	rows, err = stmt.Query(fields...)
+// 	return nil, rows, err
+// }
 
 // insertRowToDB encapsulates about 6 or 7 lines of code to handle inserting a
 // database row either in the context of a transaction or not.  These lines

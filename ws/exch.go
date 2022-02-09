@@ -155,19 +155,17 @@ func SvcHandlerExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 			SvcSearchExch(w, r, d) // it is a query for the grid.
 		} else {
 			if d.ID < 0 {
-				SvcErrorReturn(w, fmt.Errorf("XID is required but was not specified"))
+				SvcErrorReturn(w, fmt.Errorf("field XID is required but was not specified"))
 				return
 			}
 			getExch(w, r, d)
 		}
-		break
 	case "save":
 		saveExch(w, r, d)
-		break
 	case "delete":
 		deleteExch(w, r, d)
 	default:
-		err := fmt.Errorf("Unhandled command: %s", d.wsSearchReq.Cmd)
+		err := fmt.Errorf("unhandled command: %s", d.wsSearchReq.Cmd)
 		SvcErrorReturn(w, err)
 		return
 	}
@@ -481,7 +479,7 @@ func getExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		gg.Recid = gg.XID
 		g.Record = gg
 	} else {
-		err = fmt.Errorf("Could not find Exch with XID = %d", d.ID)
+		err = fmt.Errorf("could not find Exch with XID = %d", d.ID)
 		SvcErrorReturn(w, err)
 		return
 	}

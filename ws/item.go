@@ -145,19 +145,17 @@ func SvcHandlerItem(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 			SvcSearchItem(w, r, d) // it is a query for the grid.
 		} else {
 			if d.ID < 0 {
-				SvcErrorReturn(w, fmt.Errorf("IID is required but was not specified"))
+				SvcErrorReturn(w, fmt.Errorf("field IID is required but was not specified"))
 				return
 			}
 			getItem(w, r, d)
 		}
-		break
 	case "save":
 		saveItem(w, r, d)
-		break
 	case "delete":
 		deleteItem(w, r, d)
 	default:
-		err := fmt.Errorf("Unhandled command: %s", d.wsSearchReq.Cmd)
+		err := fmt.Errorf("unhandled command: %s", d.wsSearchReq.Cmd)
 		SvcErrorReturn(w, err)
 		return
 	}
@@ -445,7 +443,7 @@ func getItem(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		gg.Recid = gg.IID
 		g.Record = gg
 	} else {
-		err = fmt.Errorf("Could not find Item with IID = %d", d.ID)
+		err = fmt.Errorf("could not find Item with IID = %d", d.ID)
 		SvcErrorReturn(w, err)
 		return
 	}

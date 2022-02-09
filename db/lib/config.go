@@ -37,12 +37,17 @@ func ReadConfig() error {
 	}
 	// fmt.Printf("Executable folder = %s\n", folderPath)
 	fname := folderPath + "/config.json"
-	err = extres.ReadConfig(fname, &Pdb.Config)
+	if err = extres.ReadConfig(fname, &Pdb.Config); err != nil {
+		fmt.Printf("error from ReadConfig : %s\n", err.Error())
+		util.Ulog("error from ReadConfig: %s", err.Error())
+		return err
+	}
+
 
 	Pdb.Zone, err = time.LoadLocation(Pdb.Config.Timezone)
 	if err != nil {
-		fmt.Printf("Error loading timezone %s : %s\n", Pdb.Config.Timezone, err.Error())
-		util.Ulog("Error loading timezone %s : %s", Pdb.Config.Timezone, err.Error())
+		fmt.Printf("error loading timezone %s : %s\n", Pdb.Config.Timezone, err.Error())
+		util.Ulog("error loading timezone %s : %s", Pdb.Config.Timezone, err.Error())
 		return err
 	}
 	return err

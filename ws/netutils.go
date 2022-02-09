@@ -122,7 +122,7 @@ func SvcUserTypeDown(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 // 	var r = UserInfoRequest{Cmd: "get"}
 // 	b, err := json.Marshal(&r)
 // 	if err != nil {
-// 		e := fmt.Errorf("Error marshaling json data: %s", err.Error())
+// 		e := fmt.Errorf("error marshaling json data: %s", err.Error())
 // 		util.Ulog("%s: %s\n", funcname, err.Error())
 // 		return p, e
 // 	}
@@ -181,7 +181,7 @@ func GetUserListInfo(uids []int64, sess *session.Session) ([]UserInfo, error) {
 	r.UIDs = append(r.UIDs, uids...)
 	b, err := json.Marshal(&r)
 	if err != nil {
-		e := fmt.Errorf("Error marshaling json data: %s", err.Error())
+		e := fmt.Errorf("error marshaling json data: %s", err.Error())
 		util.Ulog("%s: %s\n", funcname, err.Error())
 		return g, e
 	}
@@ -193,6 +193,9 @@ func GetUserListInfo(uids []int64, sess *session.Session) ([]UserInfo, error) {
 	cookies := fmt.Sprintf("%s=%s", session.SessionCookieName, sess.Token) // we need the cookie so that Phonebook gives us back the info
 	// util.Console("userInfo request: %s\n", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(b))
+	if err != nil {
+		return g, fmt.Errorf("%s: failed to POST:  %s", funcname, err.Error())
+	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("cookie", cookies)
 	client := &http.Client{}

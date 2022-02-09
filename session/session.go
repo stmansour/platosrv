@@ -98,6 +98,9 @@ var SessionTimeout time.Duration // in minutes
 // token is stored.
 var SessionCookieName = string("air")
 
+//
+var cleanupLoop = true   // provides a way to stop the cleanup loop
+
 // Init must be called prior to using the session subsystem. It
 // initializes structures and starts the dispatcher
 //
@@ -148,9 +151,11 @@ func Dispatcher() {
 
 // Cleanup a Go routine to periodically spin through the session list
 // and remove any sessions which have timed out.
+//
+// this function will loop forever or stop when cleanupLoop is set to false
 //-----------------------------------------------------------------------------
 func Cleanup() {
-	for {
+	for cleanupLoop {
 		select {
 		case <-time.After(CleanupTime * time.Minute):
 			ReqSessionMem <- 1                 // ask to access the shared mem, blocks until granted
@@ -310,7 +315,7 @@ func getUserInfo(a *ValidateCookieResponse) (DirectoryPerson, error) {
 	var r = UserInfoRequest{Cmd: "get"}
 	b, err := json.Marshal(&r)
 	if err != nil {
-		e := fmt.Errorf("Error marshaling json data: %s", err.Error())
+		e := fmt.Errorf("error marshaling json data: %s", err.Error())
 		util.Ulog("%s: %s\n", funcname, err.Error())
 		return p, e
 	}
@@ -322,12 +327,15 @@ func getUserInfo(a *ValidateCookieResponse) (DirectoryPerson, error) {
 	cookies := fmt.Sprintf("%s=%s", SessionCookieName, a.Token) // we need the cookie so that Phonebook gives us back the info
 	// util.Console("userInfo request: %s\n", url)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(b))
+	if err != nil {
+		return p, fmt.Errorf("%s: error with POST:  %s", funcname, err.Error())
+	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("cookie", cookies)
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return p, fmt.Errorf("%s: Error with json.Unmarshal:  %s", funcname, err.Error())
+		return p, fmt.Errorf("%s: error with json.Unmarshal:  %s", funcname, err.Error())
 	}
 	defer resp.Body.Close()
 
@@ -338,7 +346,7 @@ func getUserInfo(a *ValidateCookieResponse) (DirectoryPerson, error) {
 
 	var foo UserInfoResponse
 	if err := json.Unmarshal([]byte(body), &foo); err != nil {
-		return p, fmt.Errorf("%s: Error with json.Unmarshal:  %s", funcname, err.Error())
+		return p, fmt.Errorf("%s: error with json.Unmarshal:  %s", funcname, err.Error())
 	}
 
 	// util.Console("before migrate: foo.record = %#v\n", foo.Record)
@@ -350,7 +358,7 @@ func getUserInfo(a *ValidateCookieResponse) (DirectoryPerson, error) {
 	case "error":
 		return p, fmt.Errorf("%s", foo.Message)
 	default:
-		return p, fmt.Errorf("%s: Unexpected response from authentication service:  %s", funcname, foo.Status)
+		return p, fmt.Errorf("%s: unexpected response from authentication service:  %s", funcname, foo.Status)
 	}
 }
 
@@ -409,7 +417,7 @@ func ValidateSessionCookie(w http.ResponseWriter, r *http.Request, getData int) 
 
 	pbr, err := json.Marshal(&vc)
 	if err != nil {
-		return vr, fmt.Errorf("Error marshaling json data: %s", err.Error())
+		return vr, fmt.Errorf("error marshaling json data: %s", err.Error())
 	}
 
 	//-----------------------------------------------------------------------
@@ -419,6 +427,9 @@ func ValidateSessionCookie(w http.ResponseWriter, r *http.Request, getData int) 
 	// util.Console("posting request to: %s\n", url)
 	// util.Console("              data: %s\n", string(pbr))
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(pbr))
+	if err != nil {
+		return vr, fmt.Errorf("%s: failed to post:  %s", funcname, err.Error())
+	}
 	req.Header.Set("Content-Type", "application/json")
 	// util.Console("\n*** req = %#v\n\n", req)
 	client := &http.Client{}
@@ -435,7 +446,7 @@ func ValidateSessionCookie(w http.ResponseWriter, r *http.Request, getData int) 
 	// util.Console("*** Directory Service *** response Body: %s\n", string(body))
 
 	if err := json.Unmarshal([]byte(body), &vr); err != nil {
-		return vr, fmt.Errorf("%s: Error with json.Unmarshal:  %s", funcname, err.Error())
+		return vr, fmt.Errorf("%s: error with json.Unmarshal:  %s", funcname, err.Error())
 	}
 	// util.Console("Successfully unmarshaled response: %s\n", string(body))
 	if vr.Status != "success" {
@@ -591,47 +602,47 @@ func Delete(s *Session, w http.ResponseWriter, r *http.Request) {
 	DumpSessions()
 }
 
-// sessSvcWrite is a general write routine for service calls... it is a bottleneck
-// where we can place debug statements as needed.
-func sessSvcWrite(w http.ResponseWriter, b []byte) {
-	charsToPrint := 500
-	format := fmt.Sprintf("First %d chars of response: %%-%d.%ds\n", charsToPrint, charsToPrint, charsToPrint)
-	// util.Console("Format string = %q\n", format)
-	util.Console(format, string(b))
-	// util.Console("\nResponse Data:  %s\n\n", string(b))
-	w.Write(b)
-}
+// // sessSvcWrite is a general write routine for service calls... it is a bottleneck
+// // where we can place debug statements as needed.
+// func sessSvcWrite(w http.ResponseWriter, b []byte) {
+// 	charsToPrint := 500
+// 	format := fmt.Sprintf("First %d chars of response: %%-%d.%ds\n", charsToPrint, charsToPrint, charsToPrint)
+// 	// util.Console("Format string = %q\n", format)
+// 	util.Console(format, string(b))
+// 	// util.Console("\nResponse Data:  %s\n\n", string(b))
+// 	w.Write(b)
+// }
 
-// sessSvcWriteResponse finishes the transaction with the W2UI client
-func sessSvcWriteResponse(g interface{}, w http.ResponseWriter) {
-	b, err := json.Marshal(g)
-	if err != nil {
-		e := fmt.Errorf("Error marshaling json data: %s", err.Error())
-		util.Ulog("SvcWriteResponse: %s\n", err.Error())
-		sessSvcErrorReturn(w, e, "sessSvcWriteResponse")
-		return
-	}
-	sessSvcWrite(w, b)
-}
+// // sessSvcWriteResponse finishes the transaction with the W2UI client
+// func sessSvcWriteResponse(g interface{}, w http.ResponseWriter) {
+// 	b, err := json.Marshal(g)
+// 	if err != nil {
+// 		e := fmt.Errorf("error marshaling json data: %s", err.Error())
+// 		util.Ulog("SvcWriteResponse: %s\n", err.Error())
+// 		sessSvcErrorReturn(w, e, "sessSvcWriteResponse")
+// 		return
+// 	}
+// 	sessSvcWrite(w, b)
+// }
 
-// sessSvcErrorReturn formats an error return to the grid widget and sends it
-func sessSvcErrorReturn(w http.ResponseWriter, err error, funcname string) {
-	// util.Console("<Function>: %s | <Error Message>: <<begin>>\n%s\n<<end>>\n", funcname, err.Error())
-	util.Console("%s: %s\n", funcname, err.Error())
-	var e sessSvcStatus
-	e.Status = "error"
-	e.Message = err.Error()
-	w.Header().Set("Content-Type", "application/json")
-	b, _ := json.Marshal(e)
-	sessSvcWrite(w, b)
-}
+// // sessSvcErrorReturn formats an error return to the grid widget and sends it
+// func sessSvcErrorReturn(w http.ResponseWriter, err error, funcname string) {
+// 	// util.Console("<Function>: %s | <Error Message>: <<begin>>\n%s\n<<end>>\n", funcname, err.Error())
+// 	util.Console("%s: %s\n", funcname, err.Error())
+// 	var e sessSvcStatus
+// 	e.Status = "error"
+// 	e.Message = err.Error()
+// 	w.Header().Set("Content-Type", "application/json")
+// 	b, _ := json.Marshal(e)
+// 	sessSvcWrite(w, b)
+// }
 
-// sessSvcSuccessResponse is used to complete a successful write operation on w2ui form save requests.
-func sessSvcSuccessResponse(w http.ResponseWriter) {
-	var g = sessSvcStatusResponse{Status: "success"}
-	w.Header().Set("Content-Type", "application/json")
-	sessSvcWriteResponse(&g, w)
-}
+// // sessSvcSuccessResponse is used to complete a successful write operation on w2ui form save requests.
+// func sessSvcSuccessResponse(w http.ResponseWriter) {
+// 	var g = sessSvcStatusResponse{Status: "success"}
+// 	w.Header().Set("Content-Type", "application/json")
+// 	sessSvcWriteResponse(&g, w)
+// }
 
 // Check encapsulates 6 lines of code that was repeated in every call
 //
