@@ -11,7 +11,7 @@ import (
 	"platosrv/session"
 	"time"
 
-	_ "mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // App is the global application structure
