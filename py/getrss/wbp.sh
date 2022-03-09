@@ -83,9 +83,22 @@ WayBackPack RSS Feed Collector
     value (currently set to ${DTSTART}).
 
 CMD:
+    -d  <startdt>
+        Begin pulling feed information from this datetime value when feedurl
+        is reached.  All subsequent reads will start from ${DTSTART}. The
+        format is YYYYMMDDHHMMSS.  Hours, minutes, seconds are optional.
 
-    -u, -update, u, update
-        Bring the database up-to-date by filling in all the data starting from
+    -f  <feedurl>
+        Skip feed URLs from the internal URL list until this url is reached.
+
+    -h  Print this help message
+
+    -p  <path>
+        By default, ${PROGNAME} stores its temporary information in a volume
+        containing "plato" and a directory named "rss".  You can override
+        this default by specifying the full path using the -p option.
+
+    -u  Bring the database up-to-date by filling in all the data starting from
         the latest date found in the Items table and ending on today's date.
 
 EXAMPLES:
@@ -102,20 +115,49 @@ ZZEOF
 }
 
 #-------------------------------------------------------------------------------
-#  GetUpdateDates  -  query the database for the latest date in the Exch table
+#  SetUpdateStartDate-query the database for the latest date in the Exch table
 #                     then set the range to cover from that date to the current
 #                     date
 #-------------------------------------------------------------------------------
 SetUpdateStartDate () {
     DTSTART=$(echo "SELECT PubDt FROM Item ORDER BY PubDt DESC limit 1;" | mysql plato | grep -v PubDt | sed 's/ .*//' | sed 's/-//g')
 }
+#-------------------------------------------------------------------------------
+#  SetDEST - determine the plato volume and set the temporary directory for
+#            the RSS feed downloads. By default, it assumes there will be a
+#            directory on the Plato volume named rss.  Failing that, it will
+#            set the name of the directory to "./rsstmp"
+#
+#            Note that DEST can also be set from a runtime option -p
+#-------------------------------------------------------------------------------
+GetDEST () {
+    echo "Trace: GetDEST:  DEST = ${DEST}"
+    if [ "${DEST}x" = "x" ]; then
+        DEST=$(ls -l /Volumes | sed 's/........................................................//' | sed 's/\///' | grep -i plato)
+        LC=$(echo ${DEST} | wc -l)
+        if (( LC > 1 )); then
+            echo "There are multiple volumes containing 'plato'"
+            exit 1
+        fi
+        if [ "${DEST}" = "" ]; then
+            DEST="./rsstmp"
+        else
+            DEST="/Volumes/${DEST}/rss"
+        fi
+    fi
+    mkdir -p "${DEST}"
+    if (( $? != 0 )); then
+        echo "Could not detect or create ${DEST}"
+        exit 1
+    fi
+    echo "RSS temp directory is: ${DEST}"
+}
 
 #-------------------------------------------------------------------------------
 #  INIIALIZE...
 #-------------------------------------------------------------------------------
-DEST="/Volumes/Plato/rss"
-# DTSTART="20110202"  # Use this date to start from scratch
-DTSTART="20211223"
+DTSTART="20110202"  # Use this date to start from scratch
+# DTSTART="20211223"
 DOWNLOADED="completed.txt"
 echo "URLS downloaded to disk during this run:" > ${DOWNLOADED}
 MYSQL=$(which mysql)
@@ -128,44 +170,79 @@ MYSQL="${MYSQL} --no-defaults"
 #-------------------------------------------------------------------------------
 #  Handle command line args...
 #-------------------------------------------------------------------------------
-for arg do
-	# echo '--> '"\`$arg'"
-	cmd=$(echo "${arg}" |tr "[:upper:]" "[:lower:]")
-    case "$cmd" in
-    "help" | "h" | "-h" | "-help")
-        usage
-        exit 0
-        ;;
-    "-u" | "-update" | "u" | "update")
-            SetUpdateStartDate
+retryURL=""   # assume no retry for now
+retryDT=""
+SKIPTORETRY=0
+
+while getopts "d:f:Hhp:u" o; do
+	echo "o = ${o}"
+	case "${o}" in
+		h | H)
+			usage
+			exit 0
+			;;
+        u)  SetUpdateStartDate
             ;;
-	*)  #invalid argument
-		echo "Unrecognized command: $arg"
-		usage
-		exit 1
-		;;
-    esac
+        f)  retryURL="${OPTARG}"
+            ;;
+        d)  retryDT="${OPTARG}"
+            ;;
+        p)  DEST="${OPTARG}"
+            echo "DEST set to ${DEST}"
+            ;;
+		*) 	usage
+			exit 1
+			;;
+	esac
 done
+shift $((OPTIND-1))
+
+GetDEST  # do this after processing options
+
+if [ "${retryURL}x" != "x" ]; then
+    SKIPTORETRY=1
+    if [ "${retryDT}x" != "x" ]; then
+        DT="${retryDT}"
+    else
+        DT="${DTSTART}"
+    fi
+    echo "Skipping to ${retryURL} @ ${DT}..."
+fi
 
 #-------------------------------------------------------------------------------
 #  On with it!
 #-------------------------------------------------------------------------------
 for url in "${urls[@]}"; do
-    rm -rf "${DEST}"
-    mkdir -p "${DEST}"
-    RETRIES=0
-    while (( RETRIES < 3 )); do
-        waybackpack "${url}" --max-retries 3 --from-date "${DTSTART}" -d "${DEST}"
-        if [ $? -eq 0 ]; then
-            RETRIES=3
+    #---------------------------------------------------------------------------
+    # If started in retry mode, skip all URLs until we hit ${retruURL}
+    #---------------------------------------------------------------------------
+    if [ "${SKIPTORETRY}" == "1" -a "${retryURL}" = "${url}" ]; then
+        SKIPTORETRY=0
+    fi
+    if (( SKIPTORETRY == 0 )); then
+        rm -rf "${DEST}"
+        mkdir -p "${DEST}"
+        RETRIES=0
+        if [ "${retryURL}" = "${url}" -a "${retryDT}x" != "x" ]; then
+            DT="${retryDT}"
         else
-            ((RETRIES += 1))
-            sleep 10
+            DT="${DTSTART}"
         fi
-    done
-    echo -n "${url} " >> ${DOWNLOADED}
-    echo "Ready to call unpack.sh \"${url}\" \"${DEST}\""
-    # exit 0    # this is temporary... just need to debug and make sure everything works.
-    ./unpack.sh "${url}" "${DEST}"
-    echo "finished" >> ${DOWNLOADED}
+        while (( RETRIES < 3 )); do
+            echo "waybackpack ${url} --max-retries 3 --from-date ${DT} -d ${DEST}"
+            waybackpack "${url}" --max-retries 3 --from-date "${DT}" -d "${DEST}"
+            if [ $? -eq 0 ]; then
+                RETRIES=3
+            else
+                ((RETRIES += 1))
+                sleep 10
+            fi
+        done
+        echo -n "${url} " >> ${DOWNLOADED}
+        echo "Ready to call unpack.sh \"${url}\" \"${DEST}\""
+        # exit 0    # this is temporary... just need to debug and make sure everything works.
+        ./unpack.sh "${url}" "${DEST}"
+        echo "finished" >> ${DOWNLOADED}
+    fi
 done
+echo "wbp.sh finished"
