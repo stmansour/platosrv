@@ -283,14 +283,18 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		"OrderClause":  order,
 	}
 
-	countQuery := db.RenderSQLQuery(query, qc)
-
-	util.Console("countQuery = %s\n", countQuery)
-	g.Total, err = db.GetQueryCount(countQuery)
-	if err != nil {
-		SvcErrorReturn(w, err)
-		return
-	}
+	//-------------------------------------------------------------------------
+	// We don't really need a count for this query. We're only going to get
+	// one day's worth of entries. This table has a LOT of records and
+	// getting a count can take more than 30 sec on a spinning drive.
+	//-------------------------------------------------------------------------
+	// countQuery := db.RenderSQLQuery(query, qc)
+	// util.Console("countQuery = %s\n", countQuery)
+	// g.Total, err = db.GetQueryCount(countQuery)
+	// if err != nil {
+	// 	SvcErrorReturn(w, err)
+	// 	return
+	// }
 	// util.Console("g.Total = %d\n", g.Total)
 
 	// FETCH the records WITH LIMIT AND OFFSET
@@ -303,9 +307,12 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 	// if query ends with ';' then remove it
 	queryWithLimit := query + limitAndOffsetClause
 
-	// Add limit and offset value
-	if d.wsSearchReq.Limit <= 0 || d.wsSearchReq.Limit > 500 {
-		d.wsSearchReq.Limit = 500
+	//------------------------------------------------------------------------
+	// Add limit and offset value... There are 1440 mins per day, so we'll
+	// use that as the limit...
+	//------------------------------------------------------------------------
+	if d.wsSearchReq.Limit <= 0 || d.wsSearchReq.Limit > 1440 {
+		d.wsSearchReq.Limit = 1440
 	}
 	qc["LimitClause"] = strconv.Itoa(d.wsSearchReq.Limit)
 	qc["OffsetClause"] = strconv.Itoa(d.wsSearchReq.Offset)
@@ -346,6 +353,7 @@ func SvcSearchExch(w http.ResponseWriter, r *http.Request, d *ServiceData) {
 		return
 	}
 
+    g.Total = int64(count)
 	g.Status = "success"
 	SvcWriteResponse(&g, w)
 }

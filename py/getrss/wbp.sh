@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 declare -a urls=(
   "https://feeds.a.dj.com/rss/RSSOpinion.xml"
@@ -133,17 +133,18 @@ SetUpdateStartDate () {
 GetDEST () {
     echo "Trace: GetDEST:  DEST = ${DEST}"
     if [ "${DEST}x" = "x" ]; then
-        DEST=$(ls -l /Volumes | sed 's/........................................................//' | sed 's/\///' | grep -i plato)
-        LC=$(echo ${DEST} | wc -l)
-        if (( LC > 1 )); then
-            echo "There are multiple volumes containing 'plato'"
-            exit 1
-        fi
-        if [ "${DEST}" = "" ]; then
-            DEST="./rsstmp"
-        else
-            DEST="/Volumes/${DEST}/rss"
-        fi
+        # DEST=$(ls -l /Volumes | sed 's/........................................................//' | sed 's/\///' | grep -i plato)
+        # LC=$(echo ${DEST} | wc -l)
+        # if (( LC > 1 )); then
+        #     echo "There are multiple volumes containing 'plato'"
+        #     exit 1
+        # fi
+        # if [ "${DEST}" = "" ]; then
+        #     DEST="./rsstmp"
+        # else
+        #     DEST="/Volumes/${DEST}/rss"
+        # fi
+        DEST="./rsstmp"
     fi
     mkdir -p "${DEST}"
     if (( $? != 0 )); then
@@ -154,14 +155,34 @@ GetDEST () {
 }
 
 #-------------------------------------------------------------------------------
+#  KillWBP - kill all instances of waybackpack running on the system
+#-------------------------------------------------------------------------------
+KillWBP () {
+    ps -ef | grep waybackpack | grep -v grep | while read line ;
+    do
+        a=(${(s/ /)line})
+        kill "$a[2]"
+        echo "killed $a{2}" >> "${RESTARTS}"
+    done;
+}
+
+#-------------------------------------------------------------------------------
 #  INIIALIZE...
 #-------------------------------------------------------------------------------
-DTSTART="20110202"  # Use this date to start from scratch
-# DTSTART="20211223"
+DTSTART="20110202"  # Use this date to start from scratch -- ** don't remove this line
+# DTSTART="20211223"  # Use this to set to a different start date
 DOWNLOADED="completed.txt"
-echo "URLS downloaded to disk during this run:" > ${DOWNLOADED}
+RESTARTS="restarted.txt"
+FINISHED="finished.txt"
+WLOG="w.log"
+
+# RESTARTME="restartme.txt"
+# rm -f "${DOWNLOADED}" "${RESTARTS}" "${WLOG}" "${FINISHED}" "${RESTARTME}"
+
+echo "URLS downloaded to disk during this run:" >> "${DOWNLOADED}"
+echo "Log of killed and restarted waybackpack processes" >> "${RESTARTS}"
 MYSQL=$(which mysql)
-if [ "x" == "${MYSQL}x" ]; then
+if [ "x" = "${MYSQL}x" ]; then
     echo "mysql command not found. Ensure that mysql is installed an in your PATH then try again."
     exit 1
 fi
@@ -216,33 +237,28 @@ for url in "${urls[@]}"; do
     #---------------------------------------------------------------------------
     # If started in retry mode, skip all URLs until we hit ${retruURL}
     #---------------------------------------------------------------------------
-    if [ "${SKIPTORETRY}" == "1" -a "${retryURL}" = "${url}" ]; then
+    if [ "${SKIPTORETRY}" = "1" -a "${retryURL}" = "${url}" ]; then
         SKIPTORETRY=0
     fi
     if (( SKIPTORETRY == 0 )); then
         rm -rf "${DEST}"
         mkdir -p "${DEST}"
-        RETRIES=0
         if [ "${retryURL}" = "${url}" -a "${retryDT}x" != "x" ]; then
             DT="${retryDT}"
         else
             DT="${DTSTART}"
         fi
-        while (( RETRIES < 3 )); do
-            echo "waybackpack ${url} --max-retries 3 --from-date ${DT} -d ${DEST}"
-            waybackpack "${url}" --max-retries 3 --from-date "${DT}" -d "${DEST}"
-            if [ $? -eq 0 ]; then
-                RETRIES=3
-            else
-                ((RETRIES += 1))
-                sleep 10
-            fi
-        done
-        echo -n "${url} " >> ${DOWNLOADED}
-        echo "Ready to call unpack.sh \"${url}\" \"${DEST}\""
-        # exit 0    # this is temporary... just need to debug and make sure everything works.
+
+        echo "Starting WayBackPack for ${url}" >> "${WLOG}"
+        date >> "${WLOG}"
+        echo "waybackpack ${url} --max-retries 3 --from-date ${DT} -d ${DEST}"
+        waybackpack "${url}" --max-retries 3 --from-date "${DT}" -d "${DEST}" >> "${WLOG}" 2>&1
+
+        echo "${url} " >> ${DOWNLOADED}
+        echo "Calling unpack.sh \"${url}\" \"${DEST}\"" | tee -a "${WLOG}"
         ./unpack.sh "${url}" "${DEST}"
+        echo "unpack.sh completed" | tee -a "${WLOG}"
         echo "finished" >> ${DOWNLOADED}
     fi
 done
-echo "wbp.sh finished"
+echo "wbp.sh finished" > "${FINISHED}"

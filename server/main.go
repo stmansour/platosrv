@@ -82,17 +82,15 @@ func main() {
 	// Get the database...
 	// s := "<awsdbusername>:<password>@tcp(<rdsinstancename>:3306)/accord"
 	s := extres.GetSQLOpenString(db.Pdb.Config.PlatoDbname, &db.Pdb.Config)
-	App.db, err = sql.Open("mysql", s)
-	if nil != err {
-
+	fmt.Printf("s = %q\n",s)
+	if App.db, err = sql.Open("mysql", s); err != nil {
 		fmt.Printf("sql.Open for database=%s, dbuser=%s: Error = %v\n", db.Pdb.Config.PlatoDbname, db.Pdb.Config.PlatoDbuser, err)
 		os.Exit(1)
 	}
 	util.Ulog("successfully opened database %q as user %q on %s\n", db.Pdb.Config.PlatoDbname, db.Pdb.Config.PlatoDbuser, db.Pdb.Config.PlatoDbhost)
 	defer App.db.Close()
 
-	err = App.db.Ping()
-	if nil != err {
+	if err = App.db.Ping(); nil != err {
 		util.Ulog("could not ping database %q as user %q on %s\n", db.Pdb.Config.PlatoDbname, db.Pdb.Config.PlatoDbuser, db.Pdb.Config.PlatoDbhost)
 		util.Ulog("error: %s\n", err.Error())
 		fmt.Printf("App.db.Ping for database=%s, dbuser=%s: Error = %v\n", db.Pdb.Config.PlatoDbname, db.Pdb.Config.PlatoDbuser, err)
