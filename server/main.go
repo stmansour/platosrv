@@ -31,9 +31,16 @@ var App struct {
 
 // HomeHandler serves static http content such as the .css files
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	if strings.Contains(r.URL.Path, ".") {
+	u := r.URL.Path;
+	util.Console("***\n***\n*** URL Request: %s\n***\n***\n", u)
+	if strings.Contains(u, ".") {
+		util.Console("*** CONTAINS .\n")
+		Chttp.ServeHTTP(w, r)
+	} else if strings.Contains(u,"sim" ) {
+		util.Console("*** CONTAINS sim\n")
 		Chttp.ServeHTTP(w, r)
 	} else {
+		util.Console("*** REDIRECT to home\n")
 		http.Redirect(w, r, "/home/", http.StatusFound)
 	}
 }

@@ -30,6 +30,7 @@ package:
 	cat js/elems/*.js >js/plato.js
 	cp js/*.js ${STATIC}/js/
 	cp js/*.css ${STATIC}/js/
+	cp -r sim1 ${STATIC}/
 	@rm -f fail
 	@echo "*** ${THISDIR}: completed package ***"
 
