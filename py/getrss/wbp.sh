@@ -111,6 +111,11 @@ EXAMPLES:
 
     	bash$  ./${PROGNAME} update
 
+    Command to start ${PROGNAME} and get all RSS feeds with articles that
+    have been released since Aug 20, 2022:
+
+    	bash$  ./${PROGNAME} update -d20220820
+
 ZZEOF
 }
 

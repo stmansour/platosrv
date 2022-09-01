@@ -17,6 +17,7 @@ let app = {
     dt: null,                   // current date
     loggedIn: false,            // wait til we log in before starting the simulation
     platoReqActive: false,      // is a response to a request pending?
+    records: [],                // temporary result set
 };
 
 function setup() {
@@ -34,6 +35,7 @@ function setup() {
 
 function draw() {
     background(220);
+    fill(0);
     text("info = " + app.config.user,200,200);
 
     if (!app.loggedIn) {
@@ -43,12 +45,32 @@ function draw() {
     }
 
     let on = color(255,0,0);
-    let off = color(70,0,0);
+    let off = color(120,0,0);
     let c = app.platoReqActive ? on : off;
     fill(c);
-    circle(200,240,10);
+    circle(200,235,10);
     text("plato server", 215, 240);
 
+    if (app.records.length > 0) {
+        processRecords();
+    }
+
+}
+
+function processRecords() {
+    let high = 0;
+    let low = Infinity;
+    for (var i = 0; i < app.records.length; i++) {
+        if (app.records[i].Close > high) {
+            high = app.records[i].High;
+        }
+        if (low > app.records[i].Low) {
+            low = app.records[i].Low;
+        }
+    }
+    fill(0);
+    let s = app.records[0].Ticker + ":  low = " + low + "   high = " + high;
+    text(s,200,260);
 }
 
 function startSimulation() {
@@ -72,6 +94,7 @@ function fetchExchData(tickers,dt) {
         }
         else if (data.status === "success") {
             console.log("Success!");
+            app.records = data.records;
         } else {
             console.log("Login service returned unexpected status: " + data.status);
         }
