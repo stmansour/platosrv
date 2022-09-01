@@ -2,10 +2,13 @@
 <html lang="en">
 
 <head>
-    <script src="../js/p5.min.js"></script>
+    <!-- <script src="../js/p5.min.js"></script> -->
+    <script src="../js/p5.js"></script>
     <script src="../js/jquery.min.js"></script>
     <script src="main.js"></script>
     <script src="config.js"></script>
+    <script src="util.js"></script>
+    <script src="ui.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
     <title>Simulation 1</title>
@@ -14,8 +17,10 @@
 <body>
     <table align="center">
         <tr>
-            <td colspan="3" align="center">
-                <h2>Simulation 1</h2>
+            <td colspan="3" align="center" bgcolor="#ddddff" id="simhdr">
+                <p style="font-size: 1.5em;">Simulation 1
+                <img src="https://s3.amazonaws.com/directory-pics/defaultProfileImage.png" height="50" alt="" id="userImage" align="right" style="border-radius:40%;">
+                </p>
             </td>
         </tr>
         <tr>
@@ -27,26 +32,30 @@
             <td colspan="3" height="10"></td>
         </tr>
         <tr>
-            <td align="right" width="50%">Control 1:</td>
-            <td><span id="branchRotation">0</span></td>
-            <td><span id="branchRotationSlider"></span></td>
+            <td align="right" width="50%">Simulation Start / Stop:</td>
+            <td><span id="simDates">0</span></td>
+            <td><span id="simSlider"></span></td>
         </tr>
         <tr>
-            <td align="right" width="50%">Control 2:</td>
-            <td><span id="initialBranchLen">0</span></td>
+            <td align="right" width="50%">Population Size:</td>
+            <td><span id="populationSize">0</span></td>
+            <td><span id="populationSlider"></span></td>
+        </tr>
+        <tr>
+            <td align="right" width="50%">Current Cycle:</td>
+            <td><span id="currentCycle">0</span></td>
             <td><span id="initialBranchLenSlider"></span></td>
         </tr>
         <tr>
-            <td align="right" width="50%">Control 3:</td>
-            <td><span id="branchDecay">0</span></td>
-            <td><span id="branchDecaySlider"></span></td>
+            <td align="right" width="50%">Best Fitness:</td>
+            <td><span id="bestFitness">0</span></td>
+            <td><span id="bestFitnessSlider"></span></td>
         </tr>
         <tr>
             <td colspan="3" height="20"></td>
         </tr>
         <tr>
             <td colspan="3" width="800">
-                Overview goes here.
             </td>
         </tr>
     </table>
