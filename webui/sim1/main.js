@@ -18,7 +18,10 @@ let app = {
     loggedIn: false,            // wait til we log in before starting the simulation
     platoReqActive: false,      // is a response to a request pending?
     records: [],                // temporary result set
+    GUID: 0,                    // not for production, but perfect and highly efficient for our little simulator
 };
+
+let tmpGuy = new MaxExch("NZDJPY");
 
 function setup() {
     let c = createCanvas(app.width, app.height);
@@ -52,7 +55,7 @@ function draw() {
     fill(201,204,212);
     text("plato server", 215, 240);
 
-    if (app.records.length > 0) {
+    if (tmpGuy.records.length > 0) {
         processRecords();
     }
 
@@ -61,51 +64,24 @@ function draw() {
 function processRecords() {
     let high = 0;
     let low = Infinity;
-    for (var i = 0; i < app.records.length; i++) {
-        if (app.records[i].Close > high) {
-            high = app.records[i].High;
+    for (var i = 0; i < tmpGuy.records.length; i++) {
+        if (tmpGuy.records[i].Close > high) {
+            high = tmpGuy.records[i].High;
         }
-        if (low > app.records[i].Low) {
-            low = app.records[i].Low;
+        if (low > tmpGuy.records[i].Low) {
+            low = tmpGuy.records[i].Low;
         }
     }
     fill(201,204,212);
-    let s = app.records[0].Ticker + ":  low = " + low + "   high = " + high;
+    let s = formatTicker(tmpGuy.records[0].Ticker) + ":  low = " + low + "   high = " + high;
     text(s,200,260);
 }
 
 function startSimulation() {
-    fetchExchData(["NZDJPY"],app.dt);
-    console.log("We did it!");
+    console.log("Starting simulation...");
+    tmpGuy.fetch(app.dt);
 }
 
-function fetchExchData(tickers,dt) {
-    let s = formatDateSlash(dt);
-    var params = {
-        cmd: "get",
-        limit: 1440,
-        Tickers: tickers,
-        Dt: s,
-    };
-    var dat = JSON.stringify(params);
-    $.post('http://localhost:8277/v1/exch/', dat, null, "json")
-    .done(function(data) {
-        if (data.status === "error") {
-            console.log(data);
-        }
-        else if (data.status === "success") {
-            console.log("Success!");
-            app.records = data.records;
-        } else {
-            console.log("Login service returned unexpected status: " + data.status);
-        }
-        return;
-    })
-    .fail(function(/*data*/){
-        console.log("Request failed");
-        return;
-    });
-}
 
 function login() {
     var params = {user: app.config.user, pass: app.config.pass };
