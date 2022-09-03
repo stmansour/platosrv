@@ -34,7 +34,7 @@ function setup() {
 }
 
 function draw() {
-    background(220);
+    background(39,40,61);
     fill(0);
     text("info = " + app.config.user,200,200);
 

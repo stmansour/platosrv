@@ -14,6 +14,7 @@ test:
 
 package:
 	for dir in $(DIRS); do make -C $$dir package;done
+	cd dist;tar cvfz plato.tar.gz plato;cd ..
 
 all: clean plato package test stats dbprod
 	@echo "Completed"
