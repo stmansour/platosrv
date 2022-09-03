@@ -35,7 +35,7 @@ function setup() {
 
 function draw() {
     background(39,40,61);
-    fill(0);
+    fill(201,204,212);
     text("info = " + app.config.user,200,200);
 
     if (!app.loggedIn) {
@@ -49,6 +49,7 @@ function draw() {
     let c = app.platoReqActive ? on : off;
     fill(c);
     circle(200,235,10);
+    fill(201,204,212);
     text("plato server", 215, 240);
 
     if (app.records.length > 0) {
@@ -68,7 +69,7 @@ function processRecords() {
             low = app.records[i].Low;
         }
     }
-    fill(0);
+    fill(201,204,212);
     let s = app.records[0].Ticker + ":  low = " + low + "   high = " + high;
     text(s,200,260);
 }
