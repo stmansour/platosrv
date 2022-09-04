@@ -19,6 +19,7 @@ let app = {
     platoReqActive: false,      // is a response to a request pending?
     records: [],                // temporary result set
     GUID: 0,                    // not for production, but perfect and highly efficient for our little simulator
+    fontSize: 12,               // point size for default font
 };
 
 let tmpGuy = new MaxExch("NZDJPY");
@@ -34,29 +35,23 @@ function setup() {
     d = new Date(app.dtStop);
     app.dtStop = d;
     initUI();
+
 }
 
 function draw() {
     background(39,40,61);
     fill(201,204,212);
-    text("info = " + app.config.user,200,200);
+    textSize(app.fontSize);
 
     if (!app.loggedIn) {
-        text("logging in...", 200, 220);
-    } else {
-        text("successfully logged in " + app.name + "  uid = " + app.uid, 200, 220);
+        text("info = " + app.config.user,200,200);
+        text("logging in...", 200, 210);
     }
-
-    let on = color(255,0,0);
-    let off = color(120,0,0);
-    let c = app.platoReqActive ? on : off;
-    fill(c);
-    circle(200,235,10);
-    fill(201,204,212);
-    text("plato server", 215, 240);
 
     if (tmpGuy.records.length > 0) {
         processRecords();
+        textSize(2*app.fontSize);
+        text(formatTicker(tmpGuy.ticker), 50,50);
     }
 
 }
@@ -96,6 +91,8 @@ function login() {
             app.name = data.Name;
             app.imageurl = data.ImageURL;
             app.loggedIn = true;
+            setTDBG("toprow14","green");
+            setInnerHTML("loginName","Hi, " + app.name);
             setImageSrc("userImage",app.imageurl);
             startSimulation();
         } else {
