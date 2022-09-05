@@ -53,9 +53,14 @@ function draw() {
     if (app.simulator.infs[0].archive.length > 0) {
         textSize(2*app.fontSize);
         text(formatTicker(app.simulator.tmpGuy.ticker), 50,50);
+        textSize(1.5 * app.fontSize);
         fill(201,204,212);
-        let s = formatTicker(app.simulator.tmpGuy.ticker) + ":  low = " + app.simulator.tmpGuy.archive[0].low + "   high = " + app.simulator.tmpGuy.archive[0].high;
-        text(s,200,260);
+        let y = 250;
+        for (let i = 0; i < app.simulator.tmpGuy.archive.length; i++) {
+            let s = formatTicker(app.simulator.tmpGuy.ticker) + ":  low = " + app.simulator.tmpGuy.archive[i].low + "   high = " + app.simulator.tmpGuy.archive[i].high;
+            text(s,200,260);
+            y += 15;
+        }
     }
 
     app.simulator.go(); // let the simulation proceed

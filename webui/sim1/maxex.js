@@ -50,6 +50,10 @@ class MaxExch extends Influencer {
         var dat = JSON.stringify(params);
         $.post('http://localhost:8277/v1/exch/', dat, null, "json")
         .done( (data) => {
+            if (data.total == 0) {
+                console.log("NO RECORDS FOUND for " +s);
+                return;
+            }
             if (data.status === "success") {
                 console.log("Successfully retrieved " + data.records.length + " records from plato server.");
                 this.records = data.records;
