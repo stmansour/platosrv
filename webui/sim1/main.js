@@ -4,7 +4,6 @@ let app = {
     width: 800,
     height: 500,
     config: null,
-    loggedIn: false,
     uid: null,
     name: null,
     imageurl: null,
@@ -20,9 +19,9 @@ let app = {
     records: [],                // temporary result set
     GUID: 0,                    // not for production, but perfect and highly efficient for our little simulator
     fontSize: 12,               // point size for default font
+    simulator: null,
 };
 
-let tmpGuy = new MaxExch("NZDJPY");
 
 function setup() {
     let c = createCanvas(app.width, app.height);
@@ -34,8 +33,11 @@ function setup() {
     app.dt = d;
     d = new Date(app.dtStop);
     app.dtStop = d;
+    app.simulator = new Simulator();
+    app.simulator.dtStart = app.dtStart;
+    app.simulator.dtStop = app.dtStop;
+    app.simulator.init();
     initUI();
-
 }
 
 function draw() {
@@ -48,45 +50,24 @@ function draw() {
         text("logging in...", 200, 210);
     }
 
-    if (tmpGuy.records.length > 0) {
-        processRecords();
+    if (app.simulator.infs[0].archive.length > 0) {
         textSize(2*app.fontSize);
-        text(formatTicker(tmpGuy.ticker), 50,50);
+        text(formatTicker(app.simulator.tmpGuy.ticker), 50,50);
+        fill(201,204,212);
+        let s = formatTicker(app.simulator.tmpGuy.ticker) + ":  low = " + app.simulator.tmpGuy.archive[0].low + "   high = " + app.simulator.tmpGuy.archive[0].high;
+        text(s,200,260);
     }
 
-}
+    app.simulator.go(); // let the simulation proceed
 
-function processRecords() {
-    let high = 0;
-    let low = Infinity;
-    for (var i = 0; i < tmpGuy.records.length; i++) {
-        if (tmpGuy.records[i].Close > high) {
-            high = tmpGuy.records[i].High;
-        }
-        if (low > tmpGuy.records[i].Low) {
-            low = tmpGuy.records[i].Low;
-        }
-    }
-    fill(201,204,212);
-    let s = formatTicker(tmpGuy.records[0].Ticker) + ":  low = " + low + "   high = " + high;
-    text(s,200,260);
 }
-
-function startSimulation() {
-    console.log("Starting simulation...");
-    tmpGuy.fetch(app.dt);
-}
-
 
 function login() {
     var params = {user: app.config.user, pass: app.config.pass };
     var dat = JSON.stringify(params);
     $.post('http://localhost:8277/v1/authn/', dat, null, "json")
     .done(function(data) {
-        if (data.status === "error") {
-            console.log(data);
-        }
-        else if (data.status === "success") {
+        if (data.status === "success") {
             app.uid = data.uid;
             app.name = data.Name;
             app.imageurl = data.ImageURL;
@@ -94,14 +75,12 @@ function login() {
             setTDBG("toprow14","green");
             setInnerHTML("loginName","Hi, " + app.name);
             setImageSrc("userImage",app.imageurl);
-            startSimulation();
+            app.simulator.begin();
         } else {
             console.log("Login service returned unexpected status: " + data.status);
         }
-        return;
     })
     .fail(function(/*data*/){
         console.log("Login failed");
-        return;
     });
 }
