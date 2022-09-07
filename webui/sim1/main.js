@@ -20,6 +20,7 @@ let app = {
     GUID: 0,                    // not for production, but perfect and highly efficient for our little simulator
     fontSize: 12,               // point size for default font
     simulator: null,
+    grid: null,
 };
 
 
@@ -37,6 +38,12 @@ function setup() {
     app.simulator.dtStart = app.dtStart;
     app.simulator.dtStop = app.dtStop;
     app.simulator.init();
+    app.grid = new Grid(50,50,app.width-100,app.height-100);
+
+    app.grid.setXRange(0,1000);  // debug only
+    app.grid.xLabelDecimals = 0;
+    app.grid.setYRange(80,90);   // debug only
+
     initUI();
 }
 
@@ -52,22 +59,30 @@ function draw() {
 
     if (app.simulator.infs[0].archive.length > 0) {
         textSize(2*app.fontSize);
-        text(formatTicker(app.simulator.tmpGuy.ticker), 50,50);
+        text(formatTicker(app.simulator.tmpGuy.ticker), 50,25);
         textSize(1.5 * app.fontSize);
         fill(201,204,212);
         let y = 250;
+        let lows = [];
         for (let i = 0; i < app.simulator.tmpGuy.archive.length; i++) {
-            let s = formatDateSlash(app.simulator.tmpGuy.archive[i].dtLow);
-            if (!app.simulator.tmpGuy.archive[i].found) {
-                s += "  NO DATA";
-            } else {
-                s +=  "   low = " + number_format(app.simulator.tmpGuy.archive[i].low,2) + " @ " + formatTime(app.simulator.tmpGuy.archive[i].dtLow) +
-                      "   high = " + number_format(app.simulator.tmpGuy.archive[i].high,2) + " @ " + formatTime(app.simulator.tmpGuy.archive[i].dtHigh);
-            }
-            text(s,50,y);
-            y += 15;
+            // let s = formatDateSlash(app.simulator.tmpGuy.archive[i].dtLow);
+            // if (!app.simulator.tmpGuy.archive[i].found) {
+            //     s += "  NO DATA";
+            // } else {
+            //     s +=  "   low = " + number_format(app.simulator.tmpGuy.archive[i].low,2) + " @ " + formatTime(app.simulator.tmpGuy.archive[i].dtLow) +
+            //           "   high = " + number_format(app.simulator.tmpGuy.archive[i].high,2) + " @ " + formatTime(app.simulator.tmpGuy.archive[i].dtHigh);
+            // }
+            // text(s,50,y);
+            // y += 15;
+
+            // plot low...
+            lows.push(app.simulator.tmpGuy.archive[i].low);
         }
+        app.grid.data = [];
+        app.grid.data.push(lows);
+        app.grid.xTicks = lows.length;
     }
+    app.grid.show();
 
     app.simulator.go(); // let the simulation proceed
 

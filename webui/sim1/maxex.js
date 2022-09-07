@@ -7,7 +7,7 @@ class MaxExch extends Influencer {
         super();                // generates the id
         this.ticker = ticker;
         this.records = [];      // place to store exch data used
-        this.dtRecords = null,  // date associated with this.records (which may be empty, that's why we need the date)
+        this.dtRecords = null;  // date associated with this.records (which may be empty, that's why we need the date)
         this.predictions = 0;
         this.correctPredictions = 0;
         this.archive = [];
