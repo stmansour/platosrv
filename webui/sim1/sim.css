@@ -1,0 +1,44 @@
+html, body {
+  background-color: black;
+  font-family: "Helvetica Neue";
+  font-size: 10pt;
+  color: #c9ccd4;
+}
+
+table {
+  border-collapse: collapse;
+  display: block;
+  /* border-color: white;
+  border: 1px; */
+}
+
+td {
+    font-family: "Helvetica Neue";
+    font-size: 9pt;
+    border: 1px solid #1f2131;  /* for normal run */
+    /* border: 1px solid white;  /* for debugging */ */
+    padding: 0.5rem;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+}
+
+canvas {
+  display: block;
+}
+
+.menuBG {
+    background: #403f5b;
+}
+
+.canvDet {
+    background: #27283d;
+}
+
+.statBG {
+    background: #141420;
+}
+
+.topMenu {
+    font-size: 9;
+}
