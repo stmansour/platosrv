@@ -65,13 +65,16 @@ function draw() {
         let y = 250;
         let lows = [];
         let highs = [];
+        let xlabels = [];
         for (let i = 0; i < app.simulator.tmpGuy.archive.length; i++) {
             lows.push(app.simulator.tmpGuy.archive[i].low);
             highs.push(app.simulator.tmpGuy.archive[i].high);
+            xlabels.push(new Date(app.simulator.tmpGuy.archive[i].dtLow));
         }
         app.grid.data = [];
         app.grid.data.push(lows);
         app.grid.data.push(highs);
+        app.grid.xLabels = xlabels;
         app.grid.xTicks = lows.length;
     }
     app.grid.show();
