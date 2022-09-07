@@ -64,22 +64,14 @@ function draw() {
         fill(201,204,212);
         let y = 250;
         let lows = [];
+        let highs = [];
         for (let i = 0; i < app.simulator.tmpGuy.archive.length; i++) {
-            // let s = formatDateSlash(app.simulator.tmpGuy.archive[i].dtLow);
-            // if (!app.simulator.tmpGuy.archive[i].found) {
-            //     s += "  NO DATA";
-            // } else {
-            //     s +=  "   low = " + number_format(app.simulator.tmpGuy.archive[i].low,2) + " @ " + formatTime(app.simulator.tmpGuy.archive[i].dtLow) +
-            //           "   high = " + number_format(app.simulator.tmpGuy.archive[i].high,2) + " @ " + formatTime(app.simulator.tmpGuy.archive[i].dtHigh);
-            // }
-            // text(s,50,y);
-            // y += 15;
-
-            // plot low...
             lows.push(app.simulator.tmpGuy.archive[i].low);
+            highs.push(app.simulator.tmpGuy.archive[i].high);
         }
         app.grid.data = [];
         app.grid.data.push(lows);
+        app.grid.data.push(highs);
         app.grid.xTicks = lows.length;
     }
     app.grid.show();
