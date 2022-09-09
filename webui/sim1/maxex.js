@@ -15,6 +15,9 @@ class MaxExch extends Influencer {
         this.dataCollected = false;
         this.responseProcessed = true;
         this.awaitingServerReply = false;
+        this.ready = false;     // are we ready to field prediction requests from an investor?
+        this.predictionRequested = false;
+        this.predictionRequest = null;
     }
 
     init() {
@@ -22,7 +25,20 @@ class MaxExch extends Influencer {
     }
 
     go() {
-        if (this.dataCollected || this.awaitingServerReply) {
+        if (this.ready && this.predictionRequested) {
+            this.goPrediction();
+        }
+
+        if (this.dataCollected && !this.ready) {
+            this.ready = true;  // we've collected data, we can field questions now
+            return;
+        }
+
+        if (this.ready) {
+            return; // we've read our data and the investor has not asked for anything at this time
+        }
+
+        if (this.awaitingServerReply) {
             return;
         }
         if (!this.responseProcessed) {
@@ -59,6 +75,10 @@ class MaxExch extends Influencer {
             //----------------------------------------------
             this.fetchExchData([this.ticker],this.dt);
         }
+    }
+
+    goPrediction() {
+        console.log("Go Prediction!");
     }
 
     fetchExchData(tickers,dt) {

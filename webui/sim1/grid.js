@@ -60,6 +60,11 @@ class Grid {
     }
 
     drawLabels() {
+        let useLabels = (this.xLabels.length > 0);
+        let labelsAreDates =(useLabels && typeof this.xLabels[0] == 'object' && this.xLabels[0].constructor.name == 'Date');
+        if (labelsAreDates && this.xTicks > 10) {
+            this.xTicks = 10; // they overlap if there are any more than 10.
+        }
         let dx = this.width/this.xTicks;
         let dy = this.height/this.yTicks;
         let x1, y1, xldx, yldy, xl, yl;
@@ -74,13 +79,22 @@ class Grid {
             textAlign(CENTER, CENTER);
             y1 = this.y + this.height + 15;
             xldx = (this.xMax - this.xMin)/this.xTicks;
-            let useLabels = (this.xLabels.length > 0);
-            let labelsAreDates =(useLabels && typeof this.xLabels[0] == 'object' && this.xLabels[0].constructor.name == 'Date');
-            for (let i = 0; i <= this.xTicks; i++) {
-                x1 = this.x + i * dx;
+            let inc = 1;
+            let iMax = this.xTicks;
+            if (useLabels) {
+                inc = this.xLabels.length/this.xTicks;
+                if (this.xLabels.length > this.xTicks) {
+                    iMax = this.xLabels.length;
+                }
+            }
+            let k = 0;
+            for (let i = 0; i <= iMax; i += inc) {
                 if (useLabels) {
-                    if (i < this.xTicks) {
-                        let t = this.xLabels[i];
+                    x1 = this.x + k * dx;
+                    k++;
+                    let idx = floor(i + 0.5);
+                    if (idx < this.xLabels.length) {
+                        let t = this.xLabels[idx];
                         if (labelsAreDates) {
                             let s = formatDateSlash(t);
                             t = s;

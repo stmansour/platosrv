@@ -11,8 +11,8 @@ let app = {
     currentCycle: 0,
     initialFunding: 100.00,
     populationSize: 10,
-    dtStart: "8/22/2022",       // simulation start date
-    dtStop: "8/31/2022",        // simulation stop date
+    dtStart: "8/01/2022",       // simulation start date
+    dtStop: "9/01/2022",        // simulation stop date
     dt: null,                   // current date
     loggedIn: false,            // wait til we log in before starting the simulation
     platoReqActive: false,      // is a response to a request pending?
