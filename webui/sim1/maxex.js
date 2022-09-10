@@ -5,13 +5,13 @@
 class MaxExch extends Influencer {
     constructor(ticker) {
         super();                // generates the id
-        this.ticker = ticker;
+        this.ticker = (typeof ticker == "undefined") ? "" : ticker;
         this.records = [];      // place to store exch data used
         this.dtRecords = null;  // date associated with this.records (which may be empty, that's why we need the date)
         this.predictions = 0;
         this.correctPredictions = 0;
         this.archive = [];
-        this.dt = null;         // what date am I currently processing
+        this.dt = app.simulator.dtStart;    // what date am I currently processing
         this.dataCollected = false;
         this.responseProcessed = true;
         this.awaitingServerReply = false;
@@ -21,7 +21,6 @@ class MaxExch extends Influencer {
     }
 
     init() {
-        this.dt = app.simulator.dtStart;
     }
 
     go() {

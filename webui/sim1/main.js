@@ -21,6 +21,7 @@ let app = {
     fontSize: 12,               // point size for default font
     simulator: null,
     grid: null,
+    registry: null,
 };
 
 
@@ -34,12 +35,13 @@ function setup() {
     app.dt = d;
     d = new Date(app.dtStop);
     app.dtStop = d;
+    app.registry = new Registry();
     app.simulator = new Simulator();
     app.simulator.dtStart = app.dtStart;
     app.simulator.dtStop = app.dtStop;
     app.simulator.init();
-    app.grid = new Grid(50,50,app.width-100,app.height-100);
 
+    app.grid = new Grid(50,50,app.width-100,app.height-100);
     app.grid.setXRange(0,1000);  // debug only
     app.grid.xLabelDecimals = 0;
     app.grid.setYRange(80,90);   // debug only
@@ -55,29 +57,30 @@ function draw() {
     if (!app.loggedIn) {
         text("info = " + app.config.user,200,200);
         text("logging in...", 200, 210);
+        return;
     }
 
-    if (app.simulator.infs[0].archive.length > 0) {
-        textSize(2*app.fontSize);
-        text(formatTicker(app.simulator.tmpGuy.ticker), 50,25);
-        textSize(1.5 * app.fontSize);
-        fill(201,204,212);
-        let y = 250;
-        let lows = [];
-        let highs = [];
-        let xlabels = [];
-        for (let i = 0; i < app.simulator.tmpGuy.archive.length; i++) {
-            lows.push(app.simulator.tmpGuy.archive[i].low);
-            highs.push(app.simulator.tmpGuy.archive[i].high);
-            xlabels.push(new Date(app.simulator.tmpGuy.archive[i].dtLow));
-        }
-        app.grid.data = [];
-        app.grid.data.push(lows);
-        app.grid.data.push(highs);
-        app.grid.xLabels = xlabels;
-        app.grid.xTicks = lows.length;
-    }
-    app.grid.show();
+    // if (app.simulator.infs[0].archive.length > 0) {
+    //     textSize(2*app.fontSize);
+    //     text(formatTicker(app.simulator.tmpGuy.ticker), 50,25);
+    //     textSize(1.5 * app.fontSize);
+    //     fill(201,204,212);
+    //     let y = 250;
+    //     let lows = [];
+    //     let highs = [];
+    //     let xlabels = [];
+    //     for (let i = 0; i < app.simulator.tmpGuy.archive.length; i++) {
+    //         lows.push(app.simulator.tmpGuy.archive[i].low);
+    //         highs.push(app.simulator.tmpGuy.archive[i].high);
+    //         xlabels.push(new Date(app.simulator.tmpGuy.archive[i].dtLow));
+    //     }
+    //     app.grid.data = [];
+    //     app.grid.data.push(lows);
+    //     app.grid.data.push(highs);
+    //     app.grid.xLabels = xlabels;
+    //     app.grid.xTicks = lows.length;
+    // }
+    // app.grid.show();
 
     app.simulator.go(); // let the simulation proceed
 

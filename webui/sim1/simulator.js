@@ -5,16 +5,19 @@ class Simulator {
         this.dtStart = null;
         this.dtStop = null;
         this.simulationStartTime = null;
-        this.infs = [];
+        this.investors = [];
+        this.investorCount = 1;
     }
 
     init() {
-        this.tmpGuy = new MaxExch("NZDJPY");
-        this.infs.push(this.tmpGuy);
+
+        // this.infs.push(new MaxExch("NZDJPY"));
         // and push a lot more things here in the future...
 
-        for (let i = 0; i < this.infs.length; i++) {
-            this.infs[i].init();
+        for (let i = 0; i < this.investorCount; i++) {
+            let inv = new Investor();
+            inv.makeInfluencers();
+            this.investors.push( inv );
         }
 
     }
@@ -26,8 +29,8 @@ class Simulator {
     }
 
     go() {
-        for (let i = 0; i < this.infs.length; i++) {
-            this.infs[i].go();
+        for (let i = 0; i < this.investors.length; i++) {
+            this.investors[i].go();
         }
     }
 }
