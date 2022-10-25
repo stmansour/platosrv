@@ -31,6 +31,7 @@ package:
 	cp js/*.js ${STATIC}/js/
 	cp js/*.css ${STATIC}/js/
 	cp -r sim1 ${STATIC}/
+	cp -r sim2 ${STATIC}/
 	@rm -f fail
 	@echo "*** ${THISDIR}: completed package ***"
 

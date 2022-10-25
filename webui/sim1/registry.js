@@ -10,6 +10,7 @@ class Registry {
     generate(c) {
         switch (c) {
             case "MaxExch": return new MaxExch();
+            case "TimeTrader": return new TimeTrader();
             default:
                 console.log("unrecognized class name: " + c);
         }

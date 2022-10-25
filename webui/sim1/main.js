@@ -14,6 +14,8 @@ let app = {
     dtStart: "8/01/2022",       // simulation start date
     dtStop: "9/01/2022",        // simulation stop date
     dt: null,                   // current date
+    dtPredictStart: "8/04/2022", // start preductions on this date
+    dtPredictStop: "9/02/2022", // stop predictions on this date
     loggedIn: false,            // wait til we log in before starting the simulation
     platoReqActive: false,      // is a response to a request pending?
     records: [],                // temporary result set
@@ -31,6 +33,7 @@ function setup() {
     setConfig();
     login();
     let d = new Date(app.dtStart);
+    app.cache = new ExchCache();
     app.dtStart = d;
     app.dt = d;
     d = new Date(app.dtStop);
@@ -60,30 +63,7 @@ function draw() {
         return;
     }
 
-    // if (app.simulator.infs[0].archive.length > 0) {
-    //     textSize(2*app.fontSize);
-    //     text(formatTicker(app.simulator.tmpGuy.ticker), 50,25);
-    //     textSize(1.5 * app.fontSize);
-    //     fill(201,204,212);
-    //     let y = 250;
-    //     let lows = [];
-    //     let highs = [];
-    //     let xlabels = [];
-    //     for (let i = 0; i < app.simulator.tmpGuy.archive.length; i++) {
-    //         lows.push(app.simulator.tmpGuy.archive[i].low);
-    //         highs.push(app.simulator.tmpGuy.archive[i].high);
-    //         xlabels.push(new Date(app.simulator.tmpGuy.archive[i].dtLow));
-    //     }
-    //     app.grid.data = [];
-    //     app.grid.data.push(lows);
-    //     app.grid.data.push(highs);
-    //     app.grid.xLabels = xlabels;
-    //     app.grid.xTicks = lows.length;
-    // }
-    // app.grid.show();
-
     app.simulator.go(); // let the simulation proceed
-
 }
 
 function login() {

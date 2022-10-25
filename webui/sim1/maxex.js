@@ -6,11 +6,15 @@ class MaxExch extends Influencer {
     constructor(ticker) {
         super();                // generates the id
         this.ticker = (typeof ticker == "undefined") ? "" : ticker;
-        this.records = [];      // place to store exch data used
+        this.records = [];      // place to store while it is being fetched
+        this.archive = [];      // place to archive the data once fetched.  An array of {low,dtLow,high,dtHigh}
+
+        // TODO:
+        this.recArchive = [];   // {dt, records} the full 1440 records for the day starting at dt (midnight)
+
         this.dtRecords = null;  // date associated with this.records (which may be empty, that's why we need the date)
         this.predictions = 0;
         this.correctPredictions = 0;
-        this.archive = [];
         this.dt = app.simulator.dtStart;    // what date am I currently processing
         this.dataCollected = false;
         this.responseProcessed = true;
@@ -21,6 +25,12 @@ class MaxExch extends Influencer {
     }
 
     init() {
+    }
+
+    // TODO:
+    // return the closing price at the requested date and minute of the day.
+    getCloseAt(dt) {
+
     }
 
     go() {

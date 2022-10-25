@@ -7,18 +7,53 @@ function setImageSrc(id,val) {
     }
 }
 
+//  Jan 25, 2022
+//-----------------------------------------------------------------------------
 function formatDate(dt) {
     const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return m[dt.getMonth()] + " " + dt.getDate() + ", " + dt.getFullYear();
 }
 
-function formatDateSlash(dt) {
+//  01/25/2022  or with sep:  01-25-2022
+//-----------------------------------------------------------------------------
+function formatDateSlash(dt,sep) {
+    if (typeof sep == "undefined") {
+        sep = "/";
+    }
     if (typeof dt == "string") {
         let x = new Date(dt);
         dt = x;
     }
-    return (""+(1 +dt.getMonth())).padStart(2,'0') + "/" + ("" + dt.getDate()).padStart(2,'0') + "/" + dt.getFullYear();
+    return (""+(1 +dt.getMonth())).padStart(2,'0') + sep + ("" + dt.getDate()).padStart(2,'0') + sep + dt.getFullYear();
 }
+
+//  2022-01-25 , or use sep
+//-----------------------------------------------------------------------------
+function formatDateYMD(dt,sep) {
+    if (typeof sep == "undefined") {
+        sep = "-";
+    }
+    if (typeof dt == "string") {
+        let x = new Date(dt);
+        dt = x;
+    }
+    return '' + dt.getFullYear() + sep + (''+(1 +dt.getMonth())).padStart(2,'0') + sep + ("" + dt.getDate()).padStart(2,'0');
+}
+
+function formatMinsToHrsMins(x) {
+    return '' + floor((x / 60)) + ":" + ('' + floor((x % 60) + 0.5)).padStart(2,'0');
+}
+
+// function formatDateDash(dt,sep) {
+//     if (typeof sep == "undefined") {
+//         sep = "-";
+//     }
+//     if (typeof dt == "string") {
+//         let x = new Date(dt);
+//         dt = x;
+//     }
+//     return ("" + dt.getFullYear() + sep + (1 +dt.getMonth())).padStart(2,'0') + sep + ("" + dt.getDate()).padStart(2,'0');
+// }
 
 function formatTime(dt) {
     if (typeof dt == "string") {
@@ -28,6 +63,12 @@ function formatTime(dt) {
     let h = "" + dt.getHours();
     let m = "" + dt.getMinutes();
     return h.padStart(2,'0') + ":" + m.padStart(2,'0');
+}
+
+function formatMinsToHHMM(m) {
+    let hrs = '' + floor(m/60);
+    let mins = '' + (m % 60);
+    return "" + hrs.padStart(2,'0') + ":" + mins.padStart(2,'0');
 }
 
 function formatDT(dt) {
