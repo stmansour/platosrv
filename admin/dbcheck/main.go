@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	db "platosrv/db/lib"
-	"platosrv/session"
 	util "platosrv/util/lib"
 	"platosrv/ws"
 
@@ -64,9 +63,8 @@ func main() {
 		util.Console("App.db.Ping for database=%s, dbuser=%s: Error = %v\n", db.Pdb.Config.PlatoDbname, db.Pdb.Config.PlatoDbuser, err)
 		os.Exit(1)
 	}
-	db.Init(App.db)                 // initializes database
-	session.Init(10, db.Pdb.Config) // we must have login sessions
-	db.BuildPreparedStatements()    // the prepared statement for db access
+	db.Init(App.db)              // initializes database
+	db.BuildPreparedStatements() // the prepared statement for db access
 
 	DBCheck()
 }

@@ -3,17 +3,17 @@ BINDIR=${TOP}/dist/plato
 THISDIR="admin/dbcheck"
 COUNTOL=${TOP}/tools/bashtools/countol.sh
 
-dbcheck: config *.go
+dbcheck: config.json *.go
 	@find . -name "fail" -exec rm -r "{}" \;
 	@touch fail
 	golint
-	if [[ -f "${GOPATH}/bin/golint" ]]; then golint; else staticcheck; fi
+	@if [[ -f "${GOPATH}/bin/golint" ]]; then golint; else staticcheck; fi
 	go build
 	# go install
 	@rm -f fail
 	@echo "*** ${THISDIR}: completed ws ***"
 
-config:
+config.json:
 	@jf rt dl accord/misc/confdev.json
 	@mv misc/confdev.json .
 	@rm -rf misc
