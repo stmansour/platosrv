@@ -22,17 +22,20 @@ var App struct {
 	LogFile   *os.File // where to log messages
 	fname     string
 	startName string
+	Warnings  bool // true if we want to show warnings
 }
 
 func readCommandLineArgs() {
 	portPtr := flag.Int("p", 8277, "port on which platosrv server listens")
 	vptr := flag.Bool("v", false, "Show version, then exit")
+	wptr := flag.Bool("w", false, "Don't show warnings")
 	flag.Parse()
 	if *vptr {
 		fmt.Printf("Version:   %s\n", ws.GetVersionNo())
 		os.Exit(0)
 	}
 	App.Port = *portPtr
+	App.Warnings = !*wptr
 }
 
 func main() {
