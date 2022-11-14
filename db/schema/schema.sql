@@ -30,6 +30,55 @@ CREATE TABLE Exch (
     PRIMARY KEY(XID)
 );
 
+CREATE TABLE ExchDaily (
+    XDID BIGINT NOT NULL AUTO_INCREMENT,                     -- unique id for this record
+    Dt DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',     -- point in time when these values, only  day month year are valid. the rest should be 0
+    Ticker VARCHAR(10) NOT NULL DEFAULT '',                 -- the two currencies involved in this exchange rate
+    Open DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- Opening value for this minute
+    High DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- High value during this minute
+    Low DECIMAL(19,4) NOT NULL DEFAULT 0,                   -- Low value during this minute
+    Close DECIMAL(19,4) NOT NULL DEFAULT 0,                 -- Closing value for this minute
+    LastModTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- when was this record last written
+    LastModBy BIGINT NOT NULL DEFAULT 0,                        -- employee UID (from phonebook) that modified it
+    CreateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,    -- when was this record created
+    CreateBy BIGINT NOT NULL DEFAULT 0,                         -- employee UID (from phonebook) that created this record
+    CONSTRAINT Alpha UNIQUE(Dt,Ticker),                     -- ensure we don't save more than one of these
+    PRIMARY KEY(XDID)
+);
+
+CREATE TABLE ExchMonthly (
+    XMID BIGINT NOT NULL AUTO_INCREMENT,                     -- unique id for this record
+    Dt DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',     -- point in time when these values, only  month year are valid. the rest should be 0
+    Ticker VARCHAR(10) NOT NULL DEFAULT '',                 -- the two currencies involved in this exchange rate
+    Open DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- Opening value for this minute
+    High DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- High value during this minute
+    Low DECIMAL(19,4) NOT NULL DEFAULT 0,                   -- Low value during this minute
+    Close DECIMAL(19,4) NOT NULL DEFAULT 0,                 -- Closing value for this minute
+    LastModTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- when was this record last written
+    LastModBy BIGINT NOT NULL DEFAULT 0,                        -- employee UID (from phonebook) that modified it
+    CreateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,    -- when was this record created
+    CreateBy BIGINT NOT NULL DEFAULT 0,                         -- employee UID (from phonebook) that created this record
+    CONSTRAINT Alpha UNIQUE(Dt,Ticker),                     -- ensure we don't save more than one of these
+    PRIMARY KEY(XMID)
+);
+
+CREATE TABLE ExchQuarterly (
+    XQID BIGINT NOT NULL AUTO_INCREMENT,                     -- unique id for this record
+    Dt DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',     -- point in time when these values, only  month year are valid. the rest should be 0
+    Ticker VARCHAR(10) NOT NULL DEFAULT '',                 -- the two currencies involved in this exchange rate
+    Open DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- Opening value for this minute
+    High DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- High value during this minute
+    Low DECIMAL(19,4) NOT NULL DEFAULT 0,                   -- Low value during this minute
+    Close DECIMAL(19,4) NOT NULL DEFAULT 0,                 -- Closing value for this minute
+    LastModTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- when was this record last written
+    LastModBy BIGINT NOT NULL DEFAULT 0,                        -- employee UID (from phonebook) that modified it
+    CreateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,    -- when was this record created
+    CreateBy BIGINT NOT NULL DEFAULT 0,                         -- employee UID (from phonebook) that created this record
+    CONSTRAINT Alpha UNIQUE(Dt,Ticker),                     -- ensure we don't save more than one of these
+    PRIMARY KEY(XQID)
+);
+
+
 CREATE TABLE Item (
     IID BIGINT NOT NULL AUTO_INCREMENT,                     -- unique id for this record
     Title VARCHAR(128) NOT NULL DEFAULT '',                 -- Article title

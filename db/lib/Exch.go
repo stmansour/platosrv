@@ -9,7 +9,7 @@ import (
 
 // Exch defines a date and a rent amount for a property. A Exch record
 // is part of a group or list. The group is defined by the RSLID
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 type Exch struct {
 	XID         int64     // unique id for this record
 	Dt          time.Time // point in time when these values are valid
@@ -32,7 +32,7 @@ type Exch struct {
 //
 // RETURNS
 // Any errors encountered, or nil if no errors
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func DeleteExch(ctx context.Context, id int64) error {
 	return genericDelete(ctx, "Exch", Pdb.Prepstmt.DeleteExch, id)
 }
@@ -46,7 +46,7 @@ func DeleteExch(ctx context.Context, id int64) error {
 // RETURNS
 // ErrSessionRequired if the session is invalid
 // nil if the session is valid
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func GetExch(ctx context.Context, id int64) (Exch, error) {
 	var a Exch
 	if !ValidateSession(ctx) {
@@ -70,7 +70,7 @@ func GetExch(ctx context.Context, id int64) (Exch, error) {
 // RETURNS
 // id of the record just inserted
 // any error encountered or nil if no error
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func InsertExch(ctx context.Context, a *Exch) (int64, error) {
 	sess, ok := session.GetSessionFromContext(ctx)
 	if !ok {
@@ -99,11 +99,11 @@ func InsertExch(ctx context.Context, a *Exch) (int64, error) {
 // row - db Row pointer
 // a   - pointer to struct to fill
 //
-// RETURNS
+// # RETURNS
 //
 // ErrSessionRequired if the session is invalid
 // nil if the session is valid
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func ReadExch(row *sql.Row, a *Exch) error {
 	err := row.Scan(
 		&a.XID,
@@ -129,11 +129,11 @@ func ReadExch(row *sql.Row, a *Exch) error {
 // row - db Row pointer
 // a   - pointer to struct to fill
 //
-// RETURNS
+// # RETURNS
 //
 // ErrSessionRequired if the session is invalid
 // nil if the session is valid
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func ReadExchs(rows *sql.Rows, a *Exch) error {
 	err := rows.Scan(
 		&a.XID,
@@ -161,7 +161,7 @@ func ReadExchs(rows *sql.Rows, a *Exch) error {
 // RETURNS
 // id of the record just inserted
 // any error encountered or nil if no error
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func UpdateExch(ctx context.Context, a *Exch) error {
 	sess, ok := session.GetSessionFromContext(ctx)
 	if !ok {

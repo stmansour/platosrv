@@ -14,14 +14,14 @@ var myRpl = mySQLRpl
 
 // GenSQLInsertAndUpdateStrings generates a string suitable for SQL INSERT and UPDATE statements given the fields as used in SELECT statements.
 //
-//  example:
-//	given this string:      "LID,BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModTime,LastModBy"
-//  we return these five strings:
-//  1)  "BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModBy"                 -- use for SELECT
-//  2)  "?,?,?,?,?,?,?,?"  														-- use for INSERT
-//  3)  "BID=?,RAID=?,GLNumber=?,Status=?,Type=?,Name=?,AcctType=?,LastModBy=?" -- use for UPDATE
-//  4)  "LID,BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModBy", 			-- use for INSERT (no PRIMARYKEY), add "WHERE LID=?"
-//  5)  "?,?,?,?,?,?,?,?,?"  													-- use for INSERT (no PRIMARYKEY)
+//	 example:
+//		given this string:      "LID,BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModTime,LastModBy"
+//	 we return these five strings:
+//	 1)  "BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModBy"                 -- use for SELECT
+//	 2)  "?,?,?,?,?,?,?,?"  														-- use for INSERT
+//	 3)  "BID=?,RAID=?,GLNumber=?,Status=?,Type=?,Name=?,AcctType=?,LastModBy=?" -- use for UPDATE
+//	 4)  "LID,BID,RAID,GLNumber,Status,Type,Name,AcctType,LastModBy", 			-- use for INSERT (no PRIMARYKEY), add "WHERE LID=?"
+//	 5)  "?,?,?,?,?,?,?,?,?"  													-- use for INSERT (no PRIMARYKEY)
 //
 // Note that in this convention, we remove LastModTime from insert and update statements (the db is set up to update them by default) and
 // we remove the initial ID as that number is AUTOINCREMENT on INSERTs and is not updated on UPDATE.
@@ -79,18 +79,18 @@ func GenSQLInsertAndUpdateStrings(s string) (string, string, string, string, str
 // BuildPreparedStatements is where we build the DBFields map and create the
 // prepared sql statements for queries
 //
-// INPUTS
+// # INPUTS
 //
-// RETURNS
+// # RETURNS
 //
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 func BuildPreparedStatements() {
 	var err error
 	var s1, s2, s3, flds string
 
 	//==========================================
 	// Exch
-	//==========================================
+	//==========================================Daily
 	flds = "XID,Dt,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
 	Pdb.DBFields["Exch"] = flds
 	Pdb.Prepstmt.GetExch, err = Pdb.DB.Prepare("SELECT " + flds + " FROM Exch WHERE XID=?")
@@ -101,6 +101,51 @@ func BuildPreparedStatements() {
 	Pdb.Prepstmt.UpdateExch, err = Pdb.DB.Prepare("UPDATE Exch SET " + s3 + " WHERE XID=?")
 	Errcheck(err)
 	Pdb.Prepstmt.DeleteExch, err = Pdb.DB.Prepare("DELETE from Exch WHERE XID=?")
+	Errcheck(err)
+
+	//==========================================
+	// ExchDaily
+	//==========================================
+	flds = "XDID,Dt,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
+	Pdb.DBFields["ExchDaily"] = flds
+	Pdb.Prepstmt.GetExchDaily, err = Pdb.DB.Prepare("SELECT " + flds + " FROM ExchDaily WHERE XDID=?")
+	Errcheck(err)
+	s1, s2, s3, _, _ = GenSQLInsertAndUpdateStrings(flds)
+	Pdb.Prepstmt.InsertExchDaily, err = Pdb.DB.Prepare("INSERT INTO ExchDaily (" + s1 + ") VALUES(" + s2 + ")")
+	Errcheck(err)
+	Pdb.Prepstmt.UpdateExchDaily, err = Pdb.DB.Prepare("UPDATE ExchDaily SET " + s3 + " WHERE XDID=?")
+	Errcheck(err)
+	Pdb.Prepstmt.DeleteExchDaily, err = Pdb.DB.Prepare("DELETE from ExchDaily WHERE XDID=?")
+	Errcheck(err)
+
+	//==========================================
+	// ExchMonthly
+	//==========================================
+	flds = "XMID,Dt,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
+	Pdb.DBFields["ExchMonthly"] = flds
+	Pdb.Prepstmt.GetExchMonthly, err = Pdb.DB.Prepare("SELECT " + flds + " FROM ExchMonthly WHERE XMID=?")
+	Errcheck(err)
+	s1, s2, s3, _, _ = GenSQLInsertAndUpdateStrings(flds)
+	Pdb.Prepstmt.InsertExchMonthly, err = Pdb.DB.Prepare("INSERT INTO ExchMonthly (" + s1 + ") VALUES(" + s2 + ")")
+	Errcheck(err)
+	Pdb.Prepstmt.UpdateExchMonthly, err = Pdb.DB.Prepare("UPDATE ExchMonthly SET " + s3 + " WHERE XMID=?")
+	Errcheck(err)
+	Pdb.Prepstmt.DeleteExchMonthly, err = Pdb.DB.Prepare("DELETE from ExchMonthly WHERE XMID=?")
+	Errcheck(err)
+
+	//==========================================
+	// ExchQuarterly
+	//==========================================
+	flds = "XQID,Dt,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
+	Pdb.DBFields["ExchQuarterly"] = flds
+	Pdb.Prepstmt.GetExchQuarterly, err = Pdb.DB.Prepare("SELECT " + flds + " FROM ExchQuarterly WHERE XQID=?")
+	Errcheck(err)
+	s1, s2, s3, _, _ = GenSQLInsertAndUpdateStrings(flds)
+	Pdb.Prepstmt.InsertExchQuarterly, err = Pdb.DB.Prepare("INSERT INTO ExchQuarterly (" + s1 + ") VALUES(" + s2 + ")")
+	Errcheck(err)
+	Pdb.Prepstmt.UpdateExchQuarterly, err = Pdb.DB.Prepare("UPDATE ExchQuarterly SET " + s3 + " WHERE XQID=?")
+	Errcheck(err)
+	Pdb.Prepstmt.DeleteExchQuarterly, err = Pdb.DB.Prepare("DELETE from ExchQuarterly WHERE XQID=?")
 	Errcheck(err)
 
 	//==========================================

@@ -1,14 +1,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"extres"
 	"flag"
 	"fmt"
 	"os"
 	db "platosrv/db/lib"
+	"platosrv/session"
 	util "platosrv/util/lib"
 	"platosrv/ws"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -16,6 +19,7 @@ import (
 // App is the global application structure
 var App struct {
 	db        *sql.DB
+	ctx       context.Context // context to use for this app
 	DBName    string
 	DBUser    string
 	Port      int      // port on which platosrv listens
@@ -66,8 +70,30 @@ func main() {
 		util.Console("App.db.Ping for database=%s, dbuser=%s: Error = %v\n", db.Pdb.Config.PlatoDbname, db.Pdb.Config.PlatoDbuser, err)
 		os.Exit(1)
 	}
-	db.Init(App.db)              // initializes database
+	util.Console("Initiating DB\n")
+	db.Init(App.db) // initializes database
+	util.Console("Building session table\n")
+	session.Init(10, db.Pdb.Config) // we must have login sessions
+	util.Console("Building prepared statements\n")
 	db.BuildPreparedStatements() // the prepared statement for db access
 
+	//------------------------------------------------------------------------
+	// Create a session that this process can use for accessing the database
+	//------------------------------------------------------------------------
+	util.Console("Create db context\n")
+	now := time.Now()
+	App.ctx = context.Background()
+	expire := now.Add(4 * time.Hour) // 4 hours
+	sess := session.New(
+		"dbtest-app"+fmt.Sprintf("%010x", expire.Unix()), // token
+		"dbtest",      // username
+		"dbtest-app",  // name string
+		int64(-99998), // uid
+		"",            // image url
+		-1,            // security role id
+		&expire)       // expiredt
+	App.ctx = session.SetSessionContextKey(App.ctx, sess)
+
 	DBCheck()
+	createExchDaily(App.ctx)
 }

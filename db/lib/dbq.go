@@ -9,6 +9,21 @@ type PrepSQL struct {
 	UpdateExch *sql.Stmt
 	DeleteExch *sql.Stmt
 
+	GetExchDaily    *sql.Stmt
+	InsertExchDaily *sql.Stmt
+	UpdateExchDaily *sql.Stmt
+	DeleteExchDaily *sql.Stmt
+
+	GetExchMonthly    *sql.Stmt
+	InsertExchMonthly *sql.Stmt
+	UpdateExchMonthly *sql.Stmt
+	DeleteExchMonthly *sql.Stmt
+
+	GetExchQuarterly    *sql.Stmt
+	InsertExchQuarterly *sql.Stmt
+	UpdateExchQuarterly *sql.Stmt
+	DeleteExchQuarterly *sql.Stmt
+
 	GetItem    *sql.Stmt
 	InsertItem *sql.Stmt
 	UpdateItem *sql.Stmt

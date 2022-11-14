@@ -81,6 +81,9 @@ func main() {
 	ctx = session.SetSessionContextKey(ctx, sess)
 
 	TestExch(ctx)
+	TestExchDaily(ctx)
+	TestExchMonthly(ctx)
+	TestExchQuarterly(ctx)
 	TestItem(ctx)
 	TestRSSFeed(ctx)
 	TestItemFeed(ctx)

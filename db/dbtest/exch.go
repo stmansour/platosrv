@@ -11,7 +11,7 @@ import (
 )
 
 // TestItem checks the basic db functions for the Exch struct
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func TestItem(ctx context.Context) {
 	var err error
 	util.Console("Entered TestItem\n")
@@ -55,7 +55,7 @@ func TestItem(ctx context.Context) {
 }
 
 // TestExch checks the basic db functions for the Exch struct
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func TestExch(ctx context.Context) {
 	var err error
 	dt := time.Date(2020, time.March, 23, 0, 0, 0, 0, time.UTC)
@@ -100,12 +100,151 @@ func TestExch(ctx context.Context) {
 	fmt.Printf("Success! Delete, Get, Insert, and Update Exch\n")
 }
 
+// TestExchDaily checks the basic db functions for the ExchDaily struct
+// -----------------------------------------------------------------------------
+func TestExchDaily(ctx context.Context) {
+	var err error
+	dt := time.Date(2020, time.March, 23, 0, 0, 0, 0, time.UTC)
+	util.Console("Entered TestExchDaily\n")
+	rs := db.ExchDaily{
+		XDID:   0,
+		Dt:     dt,
+		Ticker: "SMTEST",
+		Open:   float64(175.45),
+		High:   float64(187.12),
+		Low:    float64(171.34),
+		Close:  float64(185.62),
+	}
+	var delid, id int64
+	if id, err = db.InsertExchDaily(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting first ExchDaily: %s\n", err)
+		os.Exit(1)
+	}
+
+	// Insert another for delete...
+	rs.Dt = time.Date(2020, time.March, 24, 0, 0, 0, 0, time.UTC)
+	if delid, err = db.InsertExchDaily(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting second ExchDaily: %s\n", err)
+		os.Exit(1)
+	}
+	if err = db.DeleteExchDaily(ctx, delid); err != nil {
+		fmt.Printf("Error deleting ExchDaily: %s\n", err)
+		os.Exit(1)
+	}
+
+	var rs1 db.ExchDaily
+	if rs1, err = db.GetExchDaily(ctx, id); err != nil {
+		fmt.Printf("error in GetExchDaily: %s\n", err.Error())
+		os.Exit(1)
+	}
+	rs1.Low = float64(172.34)
+	if err = db.UpdateExchDaily(ctx, &rs1); err != nil {
+		fmt.Printf("Error updating ExchDaily: %s\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Success! Delete, Get, Insert, and Update ExchDaily\n")
+}
+
+// TestExchMonthly checks the basic db functions for the ExchMonthly struct
+// -----------------------------------------------------------------------------
+func TestExchMonthly(ctx context.Context) {
+	var err error
+	dt := time.Date(2020, time.March, 1, 0, 0, 0, 0, time.UTC)
+	util.Console("Entered TestExchMonthly\n")
+	rs := db.ExchMonthly{
+		XMID:   0,
+		Dt:     dt,
+		Ticker: "SMTEST",
+		Open:   float64(175.45),
+		High:   float64(187.12),
+		Low:    float64(171.34),
+		Close:  float64(185.62),
+	}
+	var delid, id int64
+	if id, err = db.InsertExchMonthly(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting ExchMonthly: %s\n", err)
+		os.Exit(1)
+	}
+
+	// Insert another for delete...
+	rs.Dt = time.Date(2020, time.April, 1, 0, 0, 0, 0, time.UTC)
+	if delid, err = db.InsertExchMonthly(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting ExchMonthly: %s\n", err)
+		os.Exit(1)
+	}
+	if err = db.DeleteExchMonthly(ctx, delid); err != nil {
+		fmt.Printf("Error deleting ExchMonthly: %s\n", err)
+		os.Exit(1)
+	}
+
+	var rs1 db.ExchMonthly
+	if rs1, err = db.GetExchMonthly(ctx, id); err != nil {
+		fmt.Printf("error in GetExchMonthly: %s\n", err.Error())
+		os.Exit(1)
+	}
+	rs1.Low = float64(172.34)
+	if err = db.UpdateExchMonthly(ctx, &rs1); err != nil {
+		fmt.Printf("Error updating ExchMonthly: %s\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Success! Delete, Get, Insert, and Update ExchMonthly\n")
+}
+
+// TestExchQuarterly checks the basic db functions for the ExchQuarterly struct
+// -----------------------------------------------------------------------------
+func TestExchQuarterly(ctx context.Context) {
+	var err error
+	dt := time.Date(2020, time.March, 1, 0, 0, 0, 0, time.UTC)
+	util.Console("Entered TestExchQuarterly\n")
+	rs := db.ExchQuarterly{
+		XQID:   0,
+		Dt:     dt,
+		Ticker: "SMTEST",
+		Open:   float64(175.45),
+		High:   float64(187.12),
+		Low:    float64(171.34),
+		Close:  float64(185.62),
+	}
+	var delid, id int64
+	if id, err = db.InsertExchQuarterly(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting ExchQuarterly: %s\n", err)
+		os.Exit(1)
+	}
+
+	// Insert another for delete...
+	rs.Dt = time.Date(2020, time.June, 1, 0, 0, 0, 0, time.UTC)
+	if delid, err = db.InsertExchQuarterly(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting ExchQuarterly: %s\n", err)
+		os.Exit(1)
+	}
+	if err = db.DeleteExchQuarterly(ctx, delid); err != nil {
+		fmt.Printf("Error deleting ExchQuarterly: %s\n", err)
+		os.Exit(1)
+	}
+
+	var rs1 db.ExchQuarterly
+	if rs1, err = db.GetExchQuarterly(ctx, id); err != nil {
+		fmt.Printf("error in GetExchQuarterly: %s\n", err.Error())
+		os.Exit(1)
+	}
+	rs1.Low = float64(172.34)
+	if err = db.UpdateExchQuarterly(ctx, &rs1); err != nil {
+		fmt.Printf("Error updating ExchQuarterly: %s\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Success! Delete, Get, Insert, and Update ExchQuarterly\n")
+}
+
 // TestRSSFeed checks the basic db functions for the RSSFeed struct
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func TestRSSFeed(ctx context.Context) {
 	var err error
 	var r db.RSSFeed
 	var id, id2 int64
+	fmt.Printf("\n------------------------------------------------\n")
 	r.URL = "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
 	r.FLAGS = int64(0)
 	if id, err = db.InsertRSSFeed(ctx, &r); err != nil {
@@ -159,11 +298,13 @@ func TestRSSFeed(ctx context.Context) {
 			os.Exit(1)
 		}
 	}
-	fmt.Printf("Success! Delete, Get, Insert, and Update RSSFeed\n")
+	fmt.Printf("------------------------------------------------\n")
+	fmt.Printf("Any errors above were part of the test.\n")
+	fmt.Printf("Hitting this point means everything worked.\n\n")
 }
 
 // TestItemFeed checks the basic db functions for the ItemFeed struct
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 func TestItemFeed(ctx context.Context) {
 	var err error
 	var r db.ItemFeed
