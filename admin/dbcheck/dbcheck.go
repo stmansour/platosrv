@@ -4,6 +4,7 @@ import (
 	"fmt"
 	db "platosrv/db/lib"
 	util "platosrv/util/lib"
+	"sort"
 	"time"
 )
 
@@ -14,6 +15,7 @@ func DBCheck() {
 	var err error
 	var errors, totErrors int64
 	var warnings, totWarnings int64
+	var aTickers []string
 	util.Console("Check the Exch Table\n")
 
 	//----------------------------------------------
@@ -21,15 +23,21 @@ func DBCheck() {
 	//----------------------------------------------
 	totWarnings = 0
 	totErrors = 0
+
 	for k, v := range Tickers {
 		if v > 0 {
-			util.Console("\nProcessing %s\n", k)
-			if errors, warnings, err = scanExch(k); err != nil {
-				util.Console("Error in scanExch: %s\n", err.Error)
-			}
-			totErrors += errors
-			totWarnings += warnings
+			aTickers = append(aTickers, k)
 		}
+	}
+	sort.Strings(aTickers)
+	for i := 0; i < len(aTickers); i++ {
+		k := aTickers[i]
+		util.Console("\nProcessing %s\n", k)
+		if errors, warnings, err = scanExch(k); err != nil {
+			util.Console("Error in scanExch: %s\n", err)
+		}
+		totErrors += errors
+		totWarnings += warnings
 	}
 
 	util.Console("\nFinished\nTotal Errors: %d\n", totErrors)

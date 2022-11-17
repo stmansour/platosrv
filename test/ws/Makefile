@@ -1,5 +1,5 @@
 THISDIR="ws"
-
+TOP=../..
 all:
 	@echo "*** Completed in ${THISDIR} ***"
 
