@@ -25,6 +25,7 @@ SHOWCOMMAND=0
 SCRIPTPATH=$(pwd -P)
 CASPERTEST="casperjs test"
 CYPRESSTEST="cypress run"
+PYTHON="python3"
 
 #-----------------------------------------------------------------------------
 # This value can be used by functional test scripts. Its value is incremented
@@ -327,7 +328,7 @@ goldpath() {
 #                    for easy reading.
 #############################################################################
 printServerReply() {
-	python -m json.tool serverreply
+	${PYTHON} -m json.tool serverreply
 }
 
 #############################################################################
@@ -1005,7 +1006,7 @@ dojsonPOST () {
 		COOK="${COOKIES}"
 	fi
 	CMD="curl ${COOK} -s -X POST ${1} -H \"Content-Type: application/json\" -d @${2}"
-	${CMD} | tee serverreply | python -m json.tool >${3} 2>>${LOGFILE}
+	${CMD} | tee serverreply | ${PYTHON} -m json.tool >${3} 2>>${LOGFILE}
 
 	incStep
 	checkPause
@@ -1113,7 +1114,7 @@ dobinPOST () {
 		echo ""
 		echo "CMD =  ${CMD}"
 	fi
-	${CMD} | tee serverreply | python -m json.tool >${3} 2>>${LOGFILE}
+	${CMD} | tee serverreply | ${PYTHON} -m json.tool >${3} 2>>${LOGFILE}
 
 	incStep
 	checkPause
@@ -1206,7 +1207,7 @@ dojsonGET () {
 	fi
 
 	CMD="curl ${COOK} -s ${1}"
-	${CMD} | python -m json.tool >${2} 2>>${LOGFILE}
+	${CMD} | ${PYTHON} -m json.tool >${2} 2>>${LOGFILE}
 
 	incStep
 	checkPause

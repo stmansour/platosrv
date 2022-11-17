@@ -1,4 +1,4 @@
-DIRS = ws
+DIRS = dbcheck ws
 
 clean:
 	rm -f testreport.txt dbqqqmods.sql

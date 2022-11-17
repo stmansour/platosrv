@@ -14,9 +14,14 @@ clean:
 	@echo "*** CLEAN completed in ${THISDIR} ***"
 
 config.json:
-	jfrog rt dl accord/misc/confdev.json
-	mv misc/confdev.json .; cp confdev.json config.json
-	rm -rf misc
+	@if [ -f ${TOP}/util/lib/config.json ]; then \
+		cp ${TOP}/util/lib/config.json . ;\
+	else \
+		jf rt dl accord/misc/confdev.json ;\
+		mv misc/confdev.json . ;\
+		rm -rf misc ;\
+		cp confdev.json config.json ;\
+	fi
 
 relink:
 	go build

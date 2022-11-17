@@ -14,10 +14,14 @@ dbcheck: config.json *.go
 	@echo "*** ${THISDIR}: completed ws ***"
 
 config.json:
-	@jf rt dl accord/misc/confdev.json
-	@mv misc/confdev.json .
-	@rm -rf misc
-	@cp confdev.json config.json
+	@if [ -f ${TOP}/util/lib/config.json ]; then \
+		cp ${TOP}/util/lib/config.json . ;\
+	else \
+		jf rt dl accord/misc/confdev.json ;\
+		mv misc/confdev.json . ;\
+		rm -rf misc ;\
+		cp confdev.json config.json ;\
+	fi
 
 clean:
 	go clean

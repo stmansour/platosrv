@@ -8,6 +8,7 @@ import (
 	"fmt"
 	db "platosrv/db/lib"
 	util "platosrv/util/lib"
+	"sort"
 	"strings"
 	"time"
 )
@@ -17,6 +18,8 @@ func createExchDaily(ctx context.Context) {
 	var err error
 	var errors, totErrors int64
 	var warnings, totWarnings int64
+	var aTickers []string
+
 	util.Console("Create/update ExchDaily\n")
 
 	//----------------------------------------------
@@ -24,16 +27,23 @@ func createExchDaily(ctx context.Context) {
 	//----------------------------------------------
 	totWarnings = 0
 	totErrors = 0
+
 	for k, v := range Tickers {
 		if v > 0 {
-			util.Console("\nProcessing %s\n", k)
-			if errors, warnings, err = dailyExch(k); err != nil {
-				util.Console("Error in scanExch: %s\n", err)
-			}
-			totErrors += errors
-			totWarnings += warnings
+			aTickers = append(aTickers, k)
 		}
 	}
+	sort.Strings(aTickers)
+	for i := 0; i < len(aTickers); i++ {
+		k := aTickers[i]
+		util.Console("\nProcessing %s\n", k)
+		if errors, warnings, err = dailyExch(k); err != nil {
+			util.Console("Error in scanExch: %s\n", err)
+		}
+		totErrors += errors
+		totWarnings += warnings
+	}
+
 	util.Console("\nFinished\nTotal Errors: %d\n", totErrors)
 	if App.Warnings {
 		util.Console("Total Warnings: %d\n", totWarnings)
@@ -85,30 +95,32 @@ func dailyExch(t string) (int64, int64, error) {
 		// If the day has changed then create the average for the day...
 		//----------------------------------------------------------------
 		if a.Dt.Day() != x.Dt.Day() {
-			if n > 0 { // skip if we haven't collected anything yet
-				x.Open /= float64(n)
-				x.Close /= float64(n)
-				x.High /= float64(n)
-				x.Low /= float64(n)
+			// if err = avgExchDaily(&a, &x, n, t); err != nil {
+			// 	errors++
+			// 	return errors, warnings, err
+			// }
+			x.Open /= float64(n)
+			x.Close /= float64(n)
+			x.High /= float64(n)
+			x.Low /= float64(n)
 
-				// write or update this record
-				if err = writeUpdateExchDaily(&x, t); err != nil {
-					errors++
-					return errors, warnings, err
-				}
-
-				// initialize for next record
-				x.Open = 0.0
-				x.Close = 0.0
-				x.High = 0.0
-				x.Low = 0.0
-				n = 0
+			// write or update this record
+			if err = writeUpdateExchDaily(&x, t); err != nil {
+				errors++
+				return errors, warnings, err
 			}
+
+			// initialize for next record
+			x.Open = 0.0
+			x.Close = 0.0
+			x.High = 0.0
+			x.Low = 0.0
+			n = 0
 			x.Dt = time.Date(a.Dt.Year(), a.Dt.Month(), a.Dt.Day(), 0, 0, 0, 0, time.UTC) // set this correctly whether we've collected anything or not
 		}
 
 		//---------------------------------------------------
-		// Still on the same day, add this to the totals...
+		// add this day's values to the totals...
 		//---------------------------------------------------
 		n++
 		x.Open += a.Open
@@ -120,12 +132,45 @@ func dailyExch(t string) (int64, int64, error) {
 	}
 
 	if err := rows.Err(); err != nil {
-		errors++
-		return errors, warnings, err
+		// errors++
+		// return errors, warnings, err
+		x.Open /= float64(n)
+		x.Close /= float64(n)
+		x.High /= float64(n)
+		x.Low /= float64(n)
+
+		// write or update this record
+		if err = writeUpdateExchDaily(&x, t); err != nil {
+			errors++
+			return errors, warnings, err
+		}
 	}
 
 	return errors, warnings, nil
 }
+
+// func avgExchDaily(a *db.Exch, x *db.ExchDaily, n int64, t string) error {
+// 	var err error
+// 	if n > 0 { // skip if we haven't collected anything yet
+// 		x.Open /= float64(n)
+// 		x.Close /= float64(n)
+// 		x.High /= float64(n)
+// 		x.Low /= float64(n)
+
+// 		// write or update this record
+// 		if err = writeUpdateExchDaily(x, t); err != nil {
+// 			return err
+// 		}
+
+// 		// initialize for next record
+// 		x.Open = 0.0
+// 		x.Close = 0.0
+// 		x.High = 0.0
+// 		x.Low = 0.0
+// 		n = 0
+// 	}
+// 	return nil
+// }
 
 // Write the specified record. If it exists, update it with this information.
 //

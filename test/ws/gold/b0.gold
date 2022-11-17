@@ -1,20 +1,33 @@
 {
+    "status": "success",
     "message": "",
     "record": {
         "ExchCount": 4320,
-        "ExchDtMax": "2021-11-19T00:00:00Z",
         "ExchDtMin": "2021-11-18T00:01:00Z",
+        "ExchDtMax": "2021-11-19T00:00:00Z",
         "ItemCount": 20,
-        "ItemDtMax": "2021-12-20T17:17:00Z",
         "ItemDtMin": "2021-12-18T07:13:00Z",
+        "ItemDtMax": "2021-12-20T17:17:00Z",
         "Tables": [
             {
                 "Name": "Exch",
                 "Size": 32768
             },
             {
+                "Name": "ExchDaily",
+                "Size": 32768
+            },
+            {
+                "Name": "ExchMonthly",
+                "Size": 32768
+            },
+            {
+                "Name": "ExchQuarterly",
+                "Size": 32768
+            },
+            {
                 "Name": "Item",
-                "Size": 638976
+                "Size": 32768
             },
             {
                 "Name": "ItemFeed",
@@ -25,6 +38,5 @@
                 "Size": 32768
             }
         ]
-    },
-    "status": "success"
+    }
 }

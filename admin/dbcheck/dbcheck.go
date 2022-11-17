@@ -31,6 +31,7 @@ func DBCheck() {
 			totWarnings += warnings
 		}
 	}
+
 	util.Console("\nFinished\nTotal Errors: %d\n", totErrors)
 	if App.Warnings {
 		util.Console("Total Warnings: %d\n", totWarnings)

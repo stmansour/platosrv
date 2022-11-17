@@ -96,4 +96,5 @@ func main() {
 
 	DBCheck()
 	createExchDaily(App.ctx)
+	createExchMonthly(App.ctx)
 }
