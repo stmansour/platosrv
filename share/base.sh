@@ -26,6 +26,7 @@ SCRIPTPATH=$(pwd -P)
 CASPERTEST="casperjs test"
 CYPRESSTEST="cypress run"
 PYTHON="python3"
+LASTTESTPASS=0		# 0 = fail, 1 = PASS
 
 #-----------------------------------------------------------------------------
 # This value can be used by functional test scripts. Its value is incremented
@@ -784,10 +785,12 @@ logcheck() {
 		done
 		UDIFFS=$(diff llog ll.g | wc -l)
 		if [ ${UDIFFS} -eq 0 ]; then
+			LASTTESTPASS=1
 			echo "PASSED"
 			passmsg
 			rm -f ll.g llog
 		else
+			LASTTESTPASS=0
 			echo "FAILED:  differences are as follows:" >> ${ERRFILE}
 			diff ll.g llog >> ${ERRFILE}
 			echo >> ${ERRFILE}
@@ -1054,12 +1057,14 @@ dojsonPOST () {
 
 		UDIFFS=$(diff qqx qqy | wc -l)
 		if [ ${UDIFFS} -eq 0 ]; then
+			LASTTESTPASS=1
 			if [ ${SHOWCOMMAND} -eq 1 ]; then
 				echo "PASSED	cmd: ${CMD}"
 			else
 				echo "PASSED"
 			fi
 		else
+			LASTTESTPASS=0
 			echo "FAILED..." >> ${ERRFILE}
 			echo "Differences in ${3} are as follows:" >> ${ERRFILE}
 			diff qqx qqy >> ${ERRFILE}

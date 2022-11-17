@@ -1,5 +1,8 @@
 DIRS = dbcheck ws
 
+plato:
+	for dir in $(DIRS); do make -C $$dir;done
+
 clean:
 	rm -f testreport.txt dbqqqmods.sql
 	for dir in $(DIRS); do make -C $$dir clean;done
