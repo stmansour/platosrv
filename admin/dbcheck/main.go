@@ -47,7 +47,9 @@ func readCommandLineArgs() {
 	App.Port = *portPtr
 	App.Warnings = !*wptr
 	App.OnlyWeekly = *wkptr
-	App.OnlyOneAction = true
+	if App.OnlyWeekly {
+		App.OnlyOneAction = true
+	}
 }
 
 func main() {

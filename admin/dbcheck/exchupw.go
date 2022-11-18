@@ -20,8 +20,6 @@ func createExchWeekly(ctx context.Context) {
 	var warnings, totWarnings int64
 	var aTickers []string
 
-	util.Console("Create/update ExchWeekly\n")
-
 	//----------------------------------------------
 	// Iterate through the mappings we store...
 	//----------------------------------------------
@@ -32,12 +30,12 @@ func createExchWeekly(ctx context.Context) {
 			aTickers = append(aTickers, k)
 		}
 	}
-	util.Console("aTickers before sort: %v\n", aTickers)
+	// util.Console("aTickers before sort: %v\n", aTickers)
 	sort.Strings(aTickers)
-	util.Console("aTickers after sort: %v\n", aTickers)
+	// util.Console("aTickers after sort: %v\n", aTickers)
 	for i := 0; i < len(aTickers); i++ {
 		k := aTickers[i]
-		util.Console("\nProcessing %s\n", k)
+		util.Console("\nExchWeekly Processing %s\n", k)
 		if errors, warnings, err = WeeklyExch(k); err != nil {
 			util.Console("Error in scanExch: %s\n", err)
 		}
@@ -70,7 +68,7 @@ func WeeklyExch(t string) (int64, int64, error) {
 	var errors int64
 	var warnings int64
 
-	util.Console("WeeklyExch:  processing t = %s\n", t)
+	// util.Console("WeeklyExch:  processing t = %s\n", t)
 	var qry = fmt.Sprintf(
 		`SELECT %s FROM Exch WHERE Ticker = "%s" AND YEAR(Dt)>2010 ORDER BY Dt ASC`,
 		db.Pdb.DBFields["Exch"], t)
@@ -109,10 +107,14 @@ func WeeklyExch(t string) (int64, int64, error) {
 				x.Low /= float64(n)
 
 				// write or update this record
+				// util.Console("---------------------------------------------------\n")
+				// util.Console("WRITE: Ticker=%s, ISOWeek=%d Dt=%s\n", x.Ticker, x.ISOWeek, x.Dt.Format(util.RRDATEFMTSQL))
 				if err = writeUpdateExchWeekly(&x, t); err != nil {
 					errors++
+					// util.Console("---------------------------------------------------\n")
 					return errors, warnings, err
 				}
+				// util.Console("---------------------------------------------------\n")
 
 				// initialize for next record
 				x.Open = 0.0
@@ -174,8 +176,7 @@ func writeUpdateExchWeekly(x *db.ExchWeekly, t string) error {
 	if _, err = db.InsertExchWeekly(App.ctx, x); err == nil {
 		return nil // if that worked, we're done
 	}
-
-	util.Console("\nInsertExchWeekly failed\n")
+	// util.Console("Unable to insert new record.  Record must exist...\n")
 
 	//-----------------------------------------------------------
 	// If the error was Duplicate Entry, then we just update...
@@ -193,10 +194,11 @@ func writeUpdateExchWeekly(x *db.ExchWeekly, t string) error {
 	if err = db.ReadExchWeekly(row, &x1); err != nil {
 		return err
 	}
-
+	// util.Console("Found existing record at week %d:  XWID = %d, Dt = %s\n", x1.ISOWeek, x1.XWID, x1.Dt.Format(util.RRDATETIMESQL))
 	x1.Open = x.Open
 	x1.Close = x.Close
 	x1.High = x.High
 	x1.Low = x.Low
+	// util.Console("Updating record with XWID = %d\n", x1.XWID)
 	return db.UpdateExchWeekly(App.ctx, &x1)
 }
