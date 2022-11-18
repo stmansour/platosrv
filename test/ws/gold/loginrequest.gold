@@ -3,6 +3,6 @@
     "uid": 269,
     "Name": "Billy",
     "ImageURL": "https://s3.amazonaws.com/directory-pics/269",
-    "Token": "a00a9770d296a702aefbabea0cd80e40",
+    "Token": logintoken,
     "Expire": "2022-11-14 07:09:00 UTC"
 }

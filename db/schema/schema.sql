@@ -62,8 +62,8 @@ CREATE TABLE ExchMonthly (
     PRIMARY KEY(XMID)
 );
 
-CREATE TABLE ExchQuarterly (
-    XQID BIGINT NOT NULL AUTO_INCREMENT,                     -- unique id for this record
+CREATE TABLE ExchWeekly (
+    XWID BIGINT NOT NULL AUTO_INCREMENT,                     -- unique id for this record
     Dt DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',     -- point in time when these values, only  month year are valid. the rest should be 0
     Ticker VARCHAR(10) NOT NULL DEFAULT '',                 -- the two currencies involved in this exchange rate
     Open DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- Opening value for this minute
@@ -75,7 +75,7 @@ CREATE TABLE ExchQuarterly (
     CreateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,    -- when was this record created
     CreateBy BIGINT NOT NULL DEFAULT 0,                         -- employee UID (from phonebook) that created this record
     CONSTRAINT Alpha UNIQUE(Dt,Ticker),                     -- ensure we don't save more than one of these
-    PRIMARY KEY(XQID)
+    PRIMARY KEY(XWID)
 );
 
 

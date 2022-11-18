@@ -192,14 +192,14 @@ func TestExchMonthly(ctx context.Context) {
 	fmt.Printf("Success! Delete, Get, Insert, and Update ExchMonthly\n")
 }
 
-// TestExchQuarterly checks the basic db functions for the ExchQuarterly struct
+// TestExchWeekly checks the basic db functions for the ExchWeekly struct
 // -----------------------------------------------------------------------------
-func TestExchQuarterly(ctx context.Context) {
+func TestExchWeekly(ctx context.Context) {
 	var err error
 	dt := time.Date(2020, time.March, 1, 0, 0, 0, 0, time.UTC)
-	util.Console("Entered TestExchQuarterly\n")
-	rs := db.ExchQuarterly{
-		XQID:   0,
+	util.Console("Entered TestExchWeekly\n")
+	rs := db.ExchWeekly{
+		XWID:   0,
 		Dt:     dt,
 		Ticker: "SMTEST",
 		Open:   float64(175.45),
@@ -208,34 +208,34 @@ func TestExchQuarterly(ctx context.Context) {
 		Close:  float64(185.62),
 	}
 	var delid, id int64
-	if id, err = db.InsertExchQuarterly(ctx, &rs); err != nil {
-		fmt.Printf("Error inserting ExchQuarterly: %s\n", err)
+	if id, err = db.InsertExchWeekly(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting ExchWeekly: %s\n", err)
 		os.Exit(1)
 	}
 
 	// Insert another for delete...
 	rs.Dt = time.Date(2020, time.June, 1, 0, 0, 0, 0, time.UTC)
-	if delid, err = db.InsertExchQuarterly(ctx, &rs); err != nil {
-		fmt.Printf("Error inserting ExchQuarterly: %s\n", err)
+	if delid, err = db.InsertExchWeekly(ctx, &rs); err != nil {
+		fmt.Printf("Error inserting ExchWeekly: %s\n", err)
 		os.Exit(1)
 	}
-	if err = db.DeleteExchQuarterly(ctx, delid); err != nil {
-		fmt.Printf("Error deleting ExchQuarterly: %s\n", err)
+	if err = db.DeleteExchWeekly(ctx, delid); err != nil {
+		fmt.Printf("Error deleting ExchWeekly: %s\n", err)
 		os.Exit(1)
 	}
 
-	var rs1 db.ExchQuarterly
-	if rs1, err = db.GetExchQuarterly(ctx, id); err != nil {
-		fmt.Printf("error in GetExchQuarterly: %s\n", err.Error())
+	var rs1 db.ExchWeekly
+	if rs1, err = db.GetExchWeekly(ctx, id); err != nil {
+		fmt.Printf("error in GetExchWeekly: %s\n", err.Error())
 		os.Exit(1)
 	}
 	rs1.Low = float64(172.34)
-	if err = db.UpdateExchQuarterly(ctx, &rs1); err != nil {
-		fmt.Printf("Error updating ExchQuarterly: %s\n", err)
+	if err = db.UpdateExchWeekly(ctx, &rs1); err != nil {
+		fmt.Printf("Error updating ExchWeekly: %s\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Printf("Success! Delete, Get, Insert, and Update ExchQuarterly\n")
+	fmt.Printf("Success! Delete, Get, Insert, and Update ExchWeekly\n")
 }
 
 // TestRSSFeed checks the basic db functions for the RSSFeed struct

@@ -83,7 +83,7 @@ func main() {
 	TestExch(ctx)
 	TestExchDaily(ctx)
 	TestExchMonthly(ctx)
-	TestExchQuarterly(ctx)
+	TestExchWeekly(ctx)
 	TestItem(ctx)
 	TestRSSFeed(ctx)
 	TestItemFeed(ctx)

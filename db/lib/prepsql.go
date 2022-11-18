@@ -134,18 +134,18 @@ func BuildPreparedStatements() {
 	Errcheck(err)
 
 	//==========================================
-	// ExchQuarterly
+	// ExchWeekly
 	//==========================================
-	flds = "XQID,Dt,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
-	Pdb.DBFields["ExchQuarterly"] = flds
-	Pdb.Prepstmt.GetExchQuarterly, err = Pdb.DB.Prepare("SELECT " + flds + " FROM ExchQuarterly WHERE XQID=?")
+	flds = "XWID,Dt,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
+	Pdb.DBFields["ExchWeekly"] = flds
+	Pdb.Prepstmt.GetExchWeekly, err = Pdb.DB.Prepare("SELECT " + flds + " FROM ExchWeekly WHERE XWID=?")
 	Errcheck(err)
 	s1, s2, s3, _, _ = GenSQLInsertAndUpdateStrings(flds)
-	Pdb.Prepstmt.InsertExchQuarterly, err = Pdb.DB.Prepare("INSERT INTO ExchQuarterly (" + s1 + ") VALUES(" + s2 + ")")
+	Pdb.Prepstmt.InsertExchWeekly, err = Pdb.DB.Prepare("INSERT INTO ExchWeekly (" + s1 + ") VALUES(" + s2 + ")")
 	Errcheck(err)
-	Pdb.Prepstmt.UpdateExchQuarterly, err = Pdb.DB.Prepare("UPDATE ExchQuarterly SET " + s3 + " WHERE XQID=?")
+	Pdb.Prepstmt.UpdateExchWeekly, err = Pdb.DB.Prepare("UPDATE ExchWeekly SET " + s3 + " WHERE XWID=?")
 	Errcheck(err)
-	Pdb.Prepstmt.DeleteExchQuarterly, err = Pdb.DB.Prepare("DELETE from ExchQuarterly WHERE XQID=?")
+	Pdb.Prepstmt.DeleteExchWeekly, err = Pdb.DB.Prepare("DELETE from ExchWeekly WHERE XWID=?")
 	Errcheck(err)
 
 	//==========================================
