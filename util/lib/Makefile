@@ -12,7 +12,7 @@ lib: config.json *.go
 
 config.json:
 	@if [ ! -f config.json ]; then \
-		jf rt dl accord/misc/confdev.json; \
+		/usr/local/bin/jfrog rt dl accord/misc/confdev.json; \
 		mv misc/confdev.json . ;\
 		rm -rf misc ;\
 		cp confdev.json config.json ;\
