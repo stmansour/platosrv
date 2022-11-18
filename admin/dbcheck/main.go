@@ -18,21 +18,27 @@ import (
 
 // App is the global application structure
 var App struct {
-	db        *sql.DB
-	ctx       context.Context // context to use for this app
-	DBName    string
-	DBUser    string
-	Port      int      // port on which platosrv listens
-	LogFile   *os.File // where to log messages
-	fname     string
-	startName string
-	Warnings  bool // true if we want to show warnings
+	db              *sql.DB
+	ctx             context.Context // context to use for this app
+	DBName          string
+	DBUser          string
+	Port            int      // port on which platosrv listens
+	LogFile         *os.File // where to log messages
+	fname           string
+	startName       string
+	Warnings        bool // true if we want to show warnings
+	OnlyConsistency bool
+	OnlyDaily       bool
+	OnlyWeekly      bool
+	OnlyMonthly     bool
+	OnlyOneAction   bool
 }
 
 func readCommandLineArgs() {
 	portPtr := flag.Int("p", 8277, "port on which platosrv server listens")
 	vptr := flag.Bool("v", false, "Show version, then exit")
 	wptr := flag.Bool("w", false, "Don't show warnings")
+	wkptr := flag.Bool("weekly", false, "Only build/update ExchWeekly table")
 	flag.Parse()
 	if *vptr {
 		fmt.Printf("Version:   %s\n", ws.GetVersionNo())
@@ -40,6 +46,8 @@ func readCommandLineArgs() {
 	}
 	App.Port = *portPtr
 	App.Warnings = !*wptr
+	App.OnlyWeekly = *wkptr
+	App.OnlyOneAction = true
 }
 
 func main() {
@@ -94,7 +102,14 @@ func main() {
 		&expire)       // expiredt
 	App.ctx = session.SetSessionContextKey(App.ctx, sess)
 
-	DBCheck()
-	createExchDaily(App.ctx)
-	createExchMonthly(App.ctx)
+	if !App.OnlyOneAction {
+		DBCheck()
+		createExchDaily(App.ctx)
+		createExchWeekly(App.ctx)
+		createExchMonthly(App.ctx)
+	} else {
+		if App.OnlyWeekly {
+			createExchWeekly(App.ctx)
+		}
+	}
 }

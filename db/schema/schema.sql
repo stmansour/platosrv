@@ -65,6 +65,7 @@ CREATE TABLE ExchMonthly (
 CREATE TABLE ExchWeekly (
     XWID BIGINT NOT NULL AUTO_INCREMENT,                     -- unique id for this record
     Dt DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',     -- point in time when these values, only  month year are valid. the rest should be 0
+    ISOWeek SMALLINT NOT NULL DEFAULT 0,                    -- week number for the year associated with Dt.  Dt day & Month will be first day of the ISOWeek
     Ticker VARCHAR(10) NOT NULL DEFAULT '',                 -- the two currencies involved in this exchange rate
     Open DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- Opening value for this minute
     High DECIMAL(19,4) NOT NULL DEFAULT 0,                  -- High value during this minute

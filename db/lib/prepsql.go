@@ -136,7 +136,7 @@ func BuildPreparedStatements() {
 	//==========================================
 	// ExchWeekly
 	//==========================================
-	flds = "XWID,Dt,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
+	flds = "XWID,Dt,ISOWeek,Ticker,Open,High,Low,Close,CreateTime,CreateBy,LastModTime,LastModBy"
 	Pdb.DBFields["ExchWeekly"] = flds
 	Pdb.Prepstmt.GetExchWeekly, err = Pdb.DB.Prepare("SELECT " + flds + " FROM ExchWeekly WHERE XWID=?")
 	Errcheck(err)
