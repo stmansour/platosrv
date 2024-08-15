@@ -24,6 +24,7 @@ build: clean plato package
 
 dbprod:
 	cd test;make db
+	@echo "Completed"
 
 release:
 	/usr/local/accord/bin/release.sh plato
